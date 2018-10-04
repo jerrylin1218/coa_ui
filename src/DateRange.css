@@ -1,0 +1,19 @@
+.date-range h4 {
+    display: block;
+    text-align: left;
+    width: 200px;
+}
+
+.date-range {
+}
+
+.select-min {
+    display: inline-block;
+    width: 160px;
+}
+
+.select-max {
+    margin-left: 35px;
+    display: inline-block;
+    width: 160px;
+}

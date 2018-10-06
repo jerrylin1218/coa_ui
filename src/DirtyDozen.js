@@ -8,128 +8,63 @@ import { DateRangeComponent } from './DateRange'
 
 import './DirtyDozen.css';
 
-const defaultData = [
-    {
-        itemName: "cigarette",
-        itemId: "1",
-        itemCategoryName: "cat1",
-        itemCategoryId: "cat1",
-        itemMaterialName: "mat1",
-        itemMaterialId: "mat1",
-        count: 3,
-        percentTotal: 20
-    },
-    {
-        itemName: "plastic cup",
-        itemId: "2",
-        itemCategoryName: "cat2",
-        itemCategoryId: "cat2",
-        itemMaterialName: "mat2",
-        itemMaterialId: "mat2",
-        count: 2,
-        percentTotal: 40
-    }
-    ];
-    
-    const barChartData = [
-        {
-            "name": "Plastic Bags",
-            "count": 125
-        },
-        {
-            "name": "Cigarette Filters",
-            "count": 83
-        },
-        {
-            "name": "Plastic Caps / Lids",
-            "count": 76
-        },
-        {
-            "name": "Glass Shards",
-            "count": 62
-        },
-        {
-            "name": "Plastic Utensils",
-            "count": 59
-        },
-        {
-            "name": "Paper Bags",
-            "count": 35
-        },
-        {
-            "name": "Straws / Stirrers",
-            "count": 30
-        },
-        {
-            "name": "Styrofoam Cups",
-            "count": 19
-        },
-        {
-            "name": "Candy Wrappers",
-            "count": 12
-        },
-        {
-            "name": "Metal Pieces",
-            "count": 5
-        },
-        {
-            "name": "Lumber Pieces",
-            "count": 3
-        },
-        {
-            "name": "Umbrellas",
-            "count": 1
-        },
-    ];
-    
-    function getHtmlRowFromData(data)
-    {
-        return (<tr key={data.number}>
-                <td>{data.number}</td>
-                <td>{data.name}</td>
-                <td>{data.count}</td>
-                <td>{data.percentage}</td>
-            </tr>);
-    }
-    
-    function transformDirtyDozenDataForBarChart(data)
-    {
-        return data.map((data)=>{ return { "item": data.itemName, "count":data.count, "countColor": data.color }; });
-    }
 
-    function transformDirtyDozenDataForPieChart(data)
+
+const DEFAULT_DATA = {
+    "Paper Clip": 2815,
+    "Plastic Bag": 2210,
+    "Pencil": 1536,
+    "Plastic Cup": 1453,
+    "Cigarette Butts": 1211,
+    "Soda Cans": 1001,
+    "Bottle Caps": 985,
+    "Batteries": 580,
+    "Paper": 495,
+    "Glass Bottles": 382,
+    "Screws": 64,
+    "Clothing": 28
+};
+
+function transformDirtyDozenDataForBarChart(data)
+{
+    let barChartData = [];
+    for (let key in data)
     {
-        return data.map((data)=>{ return { "id": data.itemName, "value": data.count }; });
+        barChartData.push({"item": key, "count": data[key]});
     }
-    
-    function transformDirtyDozenDataForTable(data)
+    return barChartData;
+}
+
+function transformDirtyDozenDataForPieChart(data)
+{
+    let pieChartData = [];
+    for (let key in data)
     {
-        return data.map((data) => { return (<tr key={data.itemId}>
-            <td>{data.itemId}</td>
-            <td>{data.itemName}</td>
-            <td>{data.count}</td>
-            <td>{roundToOneDecimalPercentage(data.percentTotal)}</td>
-        </tr>) });
+        pieChartData.push({"id": key, "value": data[key]});
     }
-    
-    function roundToOneDecimalPercentage(value)
+    return pieChartData;
+}
+
+function transformDirtyDozenDataForTable(data)
+{
+    let tableData = [];
+    for (let key in data)
     {
-        const numberOfDecimals = 1;
-        return Math.round(value * (10 * numberOfDecimals)) / (10 * numberOfDecimals);
+        tableData.push((<tr key={key}>
+            <td>{key}</td>
+            <td>{key}</td>
+            <td>{data[key]}</td>
+            <td>{roundToOneDecimalPercentage(data[key])}</td>
+        </tr>));
     }
-    
-    const tableStuff = (()=>{
-        let totalCount = barChartData.reduce(((accumulator, currentVal)=>accumulator + currentVal.count), 0) * 2.45;
-        let html = [];
-        for (let i = 0; i < barChartData.length; ++i)
-        {
-            let data = barChartData[i];
-            data.number = i+1;
-            data.percentage = roundToOneDecimalPercentage(barChartData[i].count/totalCount) + "%";
-            html.push(getHtmlRowFromData(data));
-        }
-        return html;
-    })();
+    return tableData;
+}
+
+function roundToOneDecimalPercentage(value)
+{
+    const numberOfDecimals = 1;
+    return Math.round(value * (10 * numberOfDecimals)) / (10 * numberOfDecimals);
+}
 
 
 export class DirtyDozenComponent extends Component {
@@ -137,31 +72,75 @@ export class DirtyDozenComponent extends Component {
     {
         super(props);
         this.state = {
+            location: {},
             tableItems: [],
-            barChartItems: [],
-            nivoBarChartData: []
+            nivoBarChartData: [],
+            nivoPieChartData: []
         };
     }
 
     componentDidMount()
     {
-        //TODO: axiom request for stuff
         this.setState({
-            tableItems: transformDirtyDozenDataForTable(defaultData),
-            barChartItems: barChartData,
-            nivoBarChartData: transformDirtyDozenDataForBarChart(defaultData),
-            nivoPieChartData: transformDirtyDozenDataForPieChart(defaultData)
+            tableItems: transformDirtyDozenDataForTable(DEFAULT_DATA),
+            nivoBarChartData: transformDirtyDozenDataForBarChart(DEFAULT_DATA),
+            nivoPieChartData: transformDirtyDozenDataForPieChart(DEFAULT_DATA)
         });
     }
 
     handleDateRangeChanged(startDate, endDate)
     {
-        console.log("handleDateRangeChanged");
+        console.log("handleDateRangeChanged", startDate, endDate);
+        this.setState({
+            "startDate": startDate,
+            "endDate": endDate
+        });this.queryDirtyDozen(this.state.location.category, this.state.location.name, startDate, endDate);
     }
 
     setLocation(location)
     {
         console.log("location", location);
+        this.setState({
+            "location": {
+                "category": "site",
+                "name": location
+            }
+        });
+        this.queryDirtyDozen("site", location, this.state.startDate, this.state.endDate);
+    }
+
+    queryDirtyDozen(locationCategory, locationName, startDate, endDate)
+    {
+        if (locationCategory && locationName && startDate && endDate)
+        {
+            locationName = locationName.trim().replace(/ /g, "%20");
+            let url = `http://coa-flask-app-dev.us-east-1.elasticbeanstalk.com/dirtydozen`
+                + `?locationCategory=` + locationCategory
+                + `&locationName=` + locationName
+                + `&startDate=` + startDate
+                + `&endDate=` + endDate
+            console.log("url",  url);
+            fetch(url,
+                {"method": 'GET', "mode": "cors"}) 
+            .then(
+                function(results) {
+                console.log("hello");
+                results.json().then(
+                    function(data) {
+                        console.log(data);
+                        this.setState({
+                            tableItems: transformDirtyDozenDataForTable(data.items),
+                            nivoBarChartData: transformDirtyDozenDataForBarChart(data.items),
+                            nivoPieChartData: transformDirtyDozenDataForPieChart(data.items)
+                        });
+                    }.bind(this));
+                }.bind(this)
+            , function() { console.log("failed"); });
+        }
+        else
+        {
+            console.log("Not enough information to query for dirty dozen statistics.");
+        }
     }
 
     render() {
@@ -326,16 +305,16 @@ export class DirtyDozenComponent extends Component {
                 motionStiffness={90}
                 motionDamping={15}
                 legends={[
-                    {
-                        "dataFrom": "keys",
-                        "anchor": "bottom-right",
-                        "direction": "column",
-                        "translateX": 120,
-                        "itemWidth": 100,
-                        "itemHeight": 20,
-                        "itemsSpacing": 2,
-                        "symbolSize": 20
-                    }
+                    // {
+                    //     "dataFrom": "keys",
+                    //     "anchor": "bottom-right",
+                    //     "direction": "column",
+                    //     "translateX": 120,
+                    //     "itemWidth": 100,
+                    //     "itemHeight": 20,
+                    //     "itemsSpacing": 2,
+                    //     "symbolSize": 20
+                    // }
                 ]}
                 theme={{
                     "tooltip": {

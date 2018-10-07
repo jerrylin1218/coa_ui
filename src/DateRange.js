@@ -18,6 +18,8 @@ export class DateRangeComponent extends Component {
             endDate: "2018-12-31",
             selections: []
         };
+
+        this.props.onDateRangeChanged(this.state.startDate, this.state.endDate);
     }
 
     componentDidMount()
@@ -34,7 +36,7 @@ export class DateRangeComponent extends Component {
         this.setState({
             startDate: selection.value
         });
-        this.props.onDateRangeChanged(this.state.startDate);
+        this.props.onDateRangeChanged(this.state.startDate, this.state.endDate);
     }
 
     onMaxDateChanged(selection)
@@ -42,7 +44,7 @@ export class DateRangeComponent extends Component {
         this.setState({
             endDate: selection.value
         });
-        this.props.onDateRangeChanged(this.state.endDate);
+        this.props.onDateRangeChanged(this.state.startDate, this.state.endDate);
     }
 
     render() {
@@ -51,12 +53,14 @@ export class DateRangeComponent extends Component {
         <h4>Select Date Range:</h4>
         <Select
           className="select-min"
+          defaultValue={{value: "2018-01-01", label: "Spring 2018"}}
           options={defaultOptions}
           onChange={this.onMinDateChanged.bind(this)}
           >
         </Select>
         <Select
           className="select-max"
+          defaultValue={{ value: "2018-08-01", label: "Fall 2018" }}
           options={defaultOptions}
           onChange={this.onMaxDateChanged.bind(this)}
           >

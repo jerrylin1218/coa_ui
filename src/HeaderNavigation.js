@@ -1,23 +1,28 @@
 import React, { Component } from 'react';
-
+import { Link } from "react-router-dom";
 import { Navbar, Nav, NavItem } from 'react-bootstrap'
+
+import "./HeaderNavigation.css"
 
 class HeaderNavigation extends Component {
   render() {
     return (
       <div className="HeaderNavigation">
-        <Navbar>
+        <Navbar fluid collapseOnSelect>
           <Navbar.Header>
             <Navbar.Brand>
-              <a href="#home">Clean Ocean Action</a>
+              <Link to="/about">Clean Ocean Action</Link>
             </Navbar.Brand>
+            <Navbar.Toggle />
           </Navbar.Header>
+          <Navbar.Collapse>
           <Nav pullRight>
-            <NavItem eventKey={1} href="#">Map</NavItem>
-            <NavItem eventKey={2} href="#">Site</NavItem>
-            <NavItem eventKey={3} href="#">Trends</NavItem>
-            <NavItem eventKey={4} href="#">About</NavItem>
+            <NavItem href="/map">Map</NavItem>
+            <NavItem href="/site">Site</NavItem>
+            <NavItem href="/trends">Trends</NavItem>
+            <NavItem href="/about">About</NavItem>
           </Nav>
+          </Navbar.Collapse>
         </Navbar>
       </div>
     );

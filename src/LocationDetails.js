@@ -69,7 +69,7 @@ class LocationDetails extends Component {
       <div className="LocationDetails">
         <Grid fluid>
         <Row>
-          <Col xs={1}>
+          <Col xs={2}>
             <h4>Site Details</h4>
             </Col>
             <Col xs={10}>
@@ -80,7 +80,7 @@ class LocationDetails extends Component {
                 onChange={this.handleLocationChanged.bind(this)}>
               </Select>
             </Col>
-        </Row>
+          </Row>
         <Col>
         </Col>
         </Grid>

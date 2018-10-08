@@ -8,38 +8,10 @@ import { DirtyDozenComponent } from './DirtyDozen';
 
 import "./LocationDetails.css"
 
-const defaultCountyOptions = [
-    {
-        label: "County 1",
-        value: "county1",
-    },
-    {
-        label: "County 2",
-        value: "county2"
-    }
-]
 
-const defaultSiteOptions = [
-    {
-        label: "Site 1",
-        value: "site1"
-    },
-    {
-        label: "Site 2",
-        value: "site2"
-    }
-]
 
-const defaultGroupedOptions = [
-    {
-        label: "Counties",
-        options: defaultCountyOptions
-    },
-    {
-        label: "Sites",
-        options: defaultSiteOptions
-    }
-]
+const transformSiteNamesToSelectOptions =
+  (data) => { return data.map((name)=>{ return {label: name, value: name}; }); };
 
 class LocationDetails extends Component {
     
@@ -47,15 +19,41 @@ class LocationDetails extends Component {
   {
     super(props);
     this.state = {
-      siteId: 214
+      locationOptions: [{
+        label: "Sites",
+        options: []
+      }]
     };
   }
 
   componentDidMount()
   {
     //TODO: axiom request for stuff
+    fetch(`http://coa-flask-app-dev.us-east-1.elasticbeanstalk.com/getsitesdropdownlist`,
+            {"method": 'GET', "mode": "cors"}) 
+          .then(
+              function(results) {
+                console.log("hello");
+                results.json().then(this.updateLocationOptions.bind(this));
+              }.bind(this)
+            , function() { console.log("Failed to hit back-end service."); });
+  }
+
+  updateLocationOptions(data)
+  {
+    console.log("updateLocationOptions", data);
     this.setState({
+      locationOptions: [
+        {
+          label: "Sites",
+          options: transformSiteNamesToSelectOptions(data.site_names)
+        }
+      ],
+      // location: {label: data.site_names[2], value: data.site_names[2]}
     });
+    // TODO: remove -- this just provides a valid start-up value to populate the screen
+    // need to also select the right value in the Select dropdown
+    // this.handleLocationChanged({value: data.site_names[2]});
   }
 
   handleLocationChanged(selection, action)

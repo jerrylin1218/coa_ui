@@ -75,6 +75,7 @@ class LocationDetails extends Component {
 
     render() {
     return (
+<<<<<<< HEAD
         <div>
             <Grid fluid>
                 <span>
@@ -155,6 +156,32 @@ class LocationDetails extends Component {
                   </Panel.Body>
               </Panel>
           </div>
+=======
+      <div className="LocationDetails">
+        <Grid fluid>
+        <Row>
+          <Col xs={2}>
+            <h4>Site Details</h4>
+            </Col>
+            <Col xs={10}>
+              <Select
+                className="select-location"
+                defaultValue={defaultSiteOptions[0]}
+                options={defaultGroupedOptions}
+                onChange={this.handleLocationChanged.bind(this)}>
+              </Select>
+            </Col>
+          </Row>
+        <Col>
+        </Col>
+        </Grid>
+        <DirtyDozenComponent
+          ref={(dirtyDozen) => {this.dirtyDozen = dirtyDozen; }}
+          >
+        </DirtyDozenComponent>
+      </div>
+      
+>>>>>>> 6e59f9b5c3172b4a1aab3f0dabbc41df6bfd6f1c
     );
   }
 }

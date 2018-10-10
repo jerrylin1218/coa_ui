@@ -73,8 +73,6 @@ class LocationDetails extends Component {
             <Col xs={10}>
               <Select
                 className="select-location"
-                defaultValue={defaultSiteOptions[0]}
-                options={defaultGroupedOptions}
                 onChange={this.handleLocationChanged.bind(this)}>
               </Select>
             </Col>

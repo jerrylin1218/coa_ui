@@ -20,7 +20,7 @@ class Site extends Component {
                     console.log(data);
                   });
               }
-            , function() { console.log("failed"); });
+            , function() { console.log("Failed to hit back-end server."); });
   }
   
   render() {

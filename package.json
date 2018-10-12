@@ -4,7 +4,9 @@
   "private": true,
   "dependencies": {
     "@nivo/bar": "^0.49.1",
+    "@nivo/line": "^0.49.1",
     "@nivo/pie": "^0.49.0",
+    "@nivo/sunburst": "^0.49.0",
     "bootstrap": "^4.1.1",
     "bootstrap3": "^3.3.5",
     "jquery": "^3.3.1",

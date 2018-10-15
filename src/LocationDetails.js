@@ -65,27 +65,36 @@ class LocationDetails extends Component {
   render() {
     return (
       <div className="LocationDetails">
-        <Grid fluid>
+        <Grid>
         <Row>
-          <Col xs={2}>
-            <h4>Site Details</h4>
+            <Col xs={2} md={1}>
+                <h4>Location</h4>
             </Col>
-            <Col xs={10}>
+            <Col xs={8} md={4}>
               <Select
                 className="select-location"
-                defaultValue={defaultSiteOptions[0]}
-                options={defaultGroupedOptions}
-                onChange={this.handleLocationChanged.bind(this)}>
+                options={this.state.locationOptions}
+                onChange={this.handleLocationChanged.bind(this)}
+                setValue={(a, b) => { console.log("select setValue", a, b); }}
+                ref={(selectLocation) => {this.selectLocation = selectLocation; }}
+              >
               </Select>
             </Col>
-          </Row>
-        <Col>
-        </Col>
+        </Row>
         </Grid>
         <DirtyDozenComponent
           ref={(dirtyDozen) => {this.dirtyDozen = dirtyDozen; }}
           >
         </DirtyDozenComponent>
+        <Grid>
+          <Row className="show-grid">
+            <Col xs={12} md={8}>
+            </Col>
+            <Col xs={6} md={4}>
+              <FilterComponent />
+            </Col>
+          </Row>
+        </Grid>
       </div>
       
     );

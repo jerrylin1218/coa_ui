@@ -34,16 +34,6 @@ function transformDirtyDozenDataForBarChart(data)
     return barChartData;
 }
 
-function transformDirtyDozenDataForPieChart(data)
-{
-    let pieChartData = [];
-    for (let key in data)
-    {
-        pieChartData.push({"id": key, "value": data[key]});
-    }
-    return pieChartData;
-}
-
 function transformDirtyDozenDataForTable(data)
 {
     let tableData = [];
@@ -85,8 +75,7 @@ export class DirtyDozenComponent extends Component {
     {
         this.setState({
             tableItems: transformDirtyDozenDataForTable(DEFAULT_DATA),
-            nivoBarChartData: transformDirtyDozenDataForBarChart(DEFAULT_DATA),
-            nivoPieChartData: transformDirtyDozenDataForPieChart(DEFAULT_DATA)
+            nivoBarChartData: transformDirtyDozenDataForBarChart(DEFAULT_DATA)
         });
     }
 
@@ -134,8 +123,7 @@ export class DirtyDozenComponent extends Component {
                         console.log(data);
                         this.setState({
                             tableItems: transformDirtyDozenDataForTable(data.items),
-                            nivoBarChartData: transformDirtyDozenDataForBarChart(data.items),
-                            nivoPieChartData: transformDirtyDozenDataForPieChart(data.items)
+                            nivoBarChartData: transformDirtyDozenDataForBarChart(data.items)
                         });
                     }.bind(this));
                 }.bind(this)

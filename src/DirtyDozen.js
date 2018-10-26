@@ -92,11 +92,12 @@ export class DirtyDozenComponent extends Component {
 
     handleDateRangeChanged(startDate, endDate)
     {
-        console.log("handleDateRangeChanged", startDate, endDate);
+        console.log("DirtyDozen::handleDateRangeChanged", startDate, endDate);
         this.setState({
             "startDate": startDate,
             "endDate": endDate
-        });this.queryDirtyDozen(this.state.location.category, this.state.location.name, startDate, endDate);
+        });
+        this.queryDirtyDozen(this.state.location.category, this.state.location.name, startDate, endDate);
     }
 
     setLocation(location)
@@ -113,6 +114,7 @@ export class DirtyDozenComponent extends Component {
 
     queryDirtyDozen(locationCategory, locationName, startDate, endDate)
     {
+        console.log("queryDirtyDozen", locationCategory, locationName, startDate, endDate);
         if (locationCategory && locationName && startDate && endDate)
         {
             locationName = locationName.trim().replace(/ /g, "%20");

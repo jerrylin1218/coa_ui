@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { DropdownButton, MenuItem, Panel, Grid, Row, Col } from 'react-bootstrap';
+import { Panel, Grid, Row, Col } from 'react-bootstrap';
 import Select from 'react-select';
 
 import { FilterComponent } from './FilterComponent';
@@ -23,6 +23,10 @@ class LocationDetails extends Component {
       locationOptions: [{
         label: "Sites",
         options: []
+      }],
+      locationTypes: [{
+        label: "Sites",
+        value: "Sites"
       }]
     };
   }
@@ -65,11 +69,14 @@ class LocationDetails extends Component {
 
     handleDateRangeChanged(startDate, endDate)
     {
-        console.log("handleDateRangeChanged", startDate, endDate);
+        console.log("LocationDetails::handleDateRangeChanged", startDate, endDate);
         this.setState({
             "startDate": startDate,
             "endDate": endDate
         });
+        if (this.dirtyDozen) {
+            this.dirtyDozen.handleDateRangeChanged(startDate, endDate);
+        }
         //this.queryDirtyDozen(this.state.location.category, this.state.location.name, startDate, endDate);
     }
 
@@ -81,30 +88,25 @@ class LocationDetails extends Component {
                     <h3 className="locDetailsHeading">Location Details </h3>
                 </span>
                 <span>
-                    <DropdownButton
-                        className="locDetailsHeading"
+                    <Select
                         bsStyle="default"
-                        bsSize="large"
-                        title="Site"
-                        key={0}
-                        id={`dropdown-basic-${0}`}>
-                        <MenuItem eventKey="1">County</MenuItem>
-                        <MenuItem eventKey="2">City</MenuItem>
-                        <MenuItem eventKey="3" active>Site</MenuItem>
-                    </DropdownButton>
+                        className="select-location-type"
+                        options={this.state.locationTypes}
+                        placeholder={"Select location type..."}
+                        defaultValue={{label: "Sites", value: "Sites"}}
+                        >
+                    </Select>
                 </span>
                 <span>
-                    <DropdownButton
-                        className="locDetailsHeading"
+                    <Select
                         bsStyle="default"
-                        bsSize="large"
-                        title="Sandy Hook"
-                        key={0}
-                        id={`dropdown-basic-${0}`}>
-                        <MenuItem eventKey="1">Sandy Hook</MenuItem>
-                        <MenuItem eventKey="2">Cape May</MenuItem>
-                        <MenuItem eventKey="3" active>Red Bank</MenuItem>
-                    </DropdownButton>
+                        className="select-location"
+                        options={this.state.locationOptions}
+                        onChange={this.handleLocationChanged.bind(this)}
+                        ref={(selectLocation) => { this.selectLocation = selectLocation; }}
+                        placeholder={"Select location..."}
+                        >
+                    </Select>
                 </span>
             </Grid>
 
@@ -131,7 +133,8 @@ class LocationDetails extends Component {
                                 <Panel>
                                     <Panel.Heading>Dirty Dozen</Panel.Heading>
                                     <Panel.Body>
-                                        <DirtyDozenComponent/>
+                                        <DirtyDozenComponent
+                                            ref={(dirtyDozen) => {this.dirtyDozen = dirtyDozen; }}/>
                                     </Panel.Body>
                                 </Panel>
                             </Col>

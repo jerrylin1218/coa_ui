@@ -1,13 +1,8 @@
 import React, { Component } from 'react';
-import { Table, Panel, Grid, Row, Col } from 'react-bootstrap';
-
+import { Table, Grid} from 'react-bootstrap';
 import { ResponsiveBar } from '@nivo/bar'
-import { ResponsivePie } from '@nivo/pie'
-
-import { DateRangeComponent } from './DateRange'
 
 import './DirtyDozen.css';
-
 
 const DEFAULT_DATA = {
     "Paper Clip": 2815,
@@ -64,10 +59,11 @@ export class DirtyDozenComponent extends Component {
     {
         super(props);
         this.state = {
-            location: {},
+            location: {},  // {category: "", name: ""}
+            startDate: "", // ISO date string (YYYY-MM-DD)
+            endDate: "",   // ISO date string (YYYY-MM-DD)
             tableItems: [],
-            nivoBarChartData: [],
-            nivoPieChartData: []
+            nivoBarChartData: []
         };
     }
 
@@ -91,7 +87,7 @@ export class DirtyDozenComponent extends Component {
 
     setLocation(location)
     {
-        console.log("location", location);
+        console.log("DirtyDozen::setLocation", location);
         this.setState({
             "location": {
                 "category": "site",
@@ -103,7 +99,7 @@ export class DirtyDozenComponent extends Component {
 
     queryDirtyDozen(locationCategory, locationName, startDate, endDate)
     {
-        console.log("queryDirtyDozen", locationCategory, locationName, startDate, endDate);
+        console.log("DirtyDozen::queryDirtyDozen", locationCategory, locationName, startDate, endDate);
         if (locationCategory && locationName && startDate && endDate)
         {
             locationName = locationName.trim().replace(/ /g, "%20");

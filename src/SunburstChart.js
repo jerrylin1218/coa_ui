@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { ResponsiveSunburst } from '@nivo/sunburst'
-import { Panel } from 'react-bootstrap';
 
 import './SunburstChart.css';
 

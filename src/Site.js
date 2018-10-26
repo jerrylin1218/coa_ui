@@ -26,11 +26,8 @@ class Site extends Component {
   render() {
     return (
       <Grid fluid>
-        <Col xs={11}>
+        <Col xs={12}>
         <LocationDetails />
-        </Col>
-        <Col xs={1}>
-          <FilterComponent />
         </Col>
       </Grid>
     );

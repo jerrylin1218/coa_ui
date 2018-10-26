@@ -64,10 +64,11 @@ export class DirtyDozenComponent extends Component {
     {
         super(props);
         this.state = {
-            location: {},
+            location: {},  // {category: "", name: ""}
+            startDate: "", // ISO date string (YYYY-MM-DD)
+            endDate: "",   // ISO date string (YYYY-MM-DD)
             tableItems: [],
-            nivoBarChartData: [],
-            nivoPieChartData: []
+            nivoBarChartData: []
         };
     }
 
@@ -91,7 +92,7 @@ export class DirtyDozenComponent extends Component {
 
     setLocation(location)
     {
-        console.log("location", location);
+        console.log("DirtyDozen::setLocation", location);
         this.setState({
             "location": {
                 "category": "site",
@@ -103,7 +104,7 @@ export class DirtyDozenComponent extends Component {
 
     queryDirtyDozen(locationCategory, locationName, startDate, endDate)
     {
-        console.log("queryDirtyDozen", locationCategory, locationName, startDate, endDate);
+        console.log("DirtyDozen::queryDirtyDozen", locationCategory, locationName, startDate, endDate);
         if (locationCategory && locationName && startDate && endDate)
         {
             locationName = locationName.trim().replace(/ /g, "%20");

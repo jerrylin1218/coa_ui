@@ -75,9 +75,9 @@ export class DirtyDozenComponent extends Component {
         });
     }
 
-    handleDateRangeChanged(startDate, endDate)
+    setDateRange(startDate, endDate)
     {
-        console.log("DirtyDozen::handleDateRangeChanged", startDate, endDate);
+        console.log("DirtyDozen::setDateRange", startDate, endDate);
         this.setState({
             "startDate": startDate,
             "endDate": endDate

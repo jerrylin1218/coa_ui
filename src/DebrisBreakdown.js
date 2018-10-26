@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { ResponsiveSunburst } from '@nivo/sunburst'
 
-import './SunburstChart.css';
+import './DebrisBreakdown.css';
 
 const DEFAULT_SUNBURST_DATA = {
     "name": "debris",
@@ -552,433 +552,14 @@ const DEFAULT_SUNBURST_DATA = {
     ]
 };
 
-const DEFAULT_CHART_DATA = {
-    "name": "nivo",
-    "color": "hsl(331, 70%, 50%)",
-    "children": [
-      {
-        "name": "viz",
-        "color": "hsl(301, 70%, 50%)",
-        "children": [
-          {
-            "name": "stack",
-            "color": "hsl(34, 70%, 50%)",
-            "children": [
-              {
-                "name": "chart",
-                "color": "hsl(123, 70%, 50%)",
-                "loc": 192856
-              },
-              {
-                "name": "xAxis",
-                "color": "hsl(269, 70%, 50%)",
-                "loc": 95341
-              },
-              {
-                "name": "yAxis",
-                "color": "hsl(52, 70%, 50%)",
-                "loc": 168058
-              },
-              {
-                "name": "layers",
-                "color": "hsl(198, 70%, 50%)",
-                "loc": 50541
-              }
-            ]
-          },
-          {
-            "name": "pie",
-            "color": "hsl(143, 70%, 50%)",
-            "children": [
-              {
-                "name": "chart",
-                "color": "hsl(139, 70%, 50%)",
-                "children": [
-                  {
-                    "name": "pie",
-                    "color": "hsl(94, 70%, 50%)",
-                    "children": [
-                      {
-                        "name": "outline",
-                        "color": "hsl(214, 70%, 50%)",
-                        "loc": 25053
-                      },
-                      {
-                        "name": "slices",
-                        "color": "hsl(79, 70%, 50%)",
-                        "loc": 80433
-                      },
-                      {
-                        "name": "bbox",
-                        "color": "hsl(88, 70%, 50%)",
-                        "loc": 175681
-                      }
-                    ]
-                  },
-                  {
-                    "name": "donut",
-                    "color": "hsl(129, 70%, 50%)",
-                    "loc": 177793
-                  },
-                  {
-                    "name": "gauge",
-                    "color": "hsl(100, 70%, 50%)",
-                    "loc": 83377
-                  }
-                ]
-              },
-              {
-                "name": "legends",
-                "color": "hsl(184, 70%, 50%)",
-                "loc": 162211
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "name": "colors",
-        "color": "hsl(144, 70%, 50%)",
-        "children": [
-          {
-            "name": "rgb",
-            "color": "hsl(165, 70%, 50%)",
-            "loc": 30954
-          },
-          {
-            "name": "hsl",
-            "color": "hsl(53, 70%, 50%)",
-            "loc": 92818
-          }
-        ]
-      },
-      {
-        "name": "utils",
-        "color": "hsl(200, 70%, 50%)",
-        "children": [
-          {
-            "name": "randomize",
-            "color": "hsl(56, 70%, 50%)",
-            "loc": 85717
-          },
-          {
-            "name": "resetClock",
-            "color": "hsl(96, 70%, 50%)",
-            "loc": 119631
-          },
-          {
-            "name": "noop",
-            "color": "hsl(352, 70%, 50%)",
-            "loc": 142108
-          },
-          {
-            "name": "tick",
-            "color": "hsl(198, 70%, 50%)",
-            "loc": 95278
-          },
-          {
-            "name": "forceGC",
-            "color": "hsl(165, 70%, 50%)",
-            "loc": 113779
-          },
-          {
-            "name": "stackTrace",
-            "color": "hsl(185, 70%, 50%)",
-            "loc": 18850
-          },
-          {
-            "name": "dbg",
-            "color": "hsl(24, 70%, 50%)",
-            "loc": 196513
-          }
-        ]
-      },
-      {
-        "name": "generators",
-        "color": "hsl(338, 70%, 50%)",
-        "children": [
-          {
-            "name": "address",
-            "color": "hsl(103, 70%, 50%)",
-            "loc": 66682
-          },
-          {
-            "name": "city",
-            "color": "hsl(191, 70%, 50%)",
-            "loc": 34677
-          },
-          {
-            "name": "animal",
-            "color": "hsl(187, 70%, 50%)",
-            "loc": 25551
-          },
-          {
-            "name": "movie",
-            "color": "hsl(35, 70%, 50%)",
-            "loc": 163168
-          },
-          {
-            "name": "user",
-            "color": "hsl(44, 70%, 50%)",
-            "loc": 74325
-          }
-        ]
-      },
-      {
-        "name": "set",
-        "color": "hsl(202, 70%, 50%)",
-        "children": [
-          {
-            "name": "clone",
-            "color": "hsl(127, 70%, 50%)",
-            "loc": 64358
-          },
-          {
-            "name": "intersect",
-            "color": "hsl(298, 70%, 50%)",
-            "loc": 134696
-          },
-          {
-            "name": "merge",
-            "color": "hsl(220, 70%, 50%)",
-            "loc": 98316
-          },
-          {
-            "name": "reverse",
-            "color": "hsl(61, 70%, 50%)",
-            "loc": 15883
-          },
-          {
-            "name": "toArray",
-            "color": "hsl(156, 70%, 50%)",
-            "loc": 132810
-          },
-          {
-            "name": "toObject",
-            "color": "hsl(96, 70%, 50%)",
-            "loc": 104120
-          },
-          {
-            "name": "fromCSV",
-            "color": "hsl(358, 70%, 50%)",
-            "loc": 24468
-          },
-          {
-            "name": "slice",
-            "color": "hsl(283, 70%, 50%)",
-            "loc": 52878
-          },
-          {
-            "name": "append",
-            "color": "hsl(104, 70%, 50%)",
-            "loc": 159192
-          },
-          {
-            "name": "prepend",
-            "color": "hsl(114, 70%, 50%)",
-            "loc": 126307
-          },
-          {
-            "name": "shuffle",
-            "color": "hsl(279, 70%, 50%)",
-            "loc": 104486
-          },
-          {
-            "name": "pick",
-            "color": "hsl(201, 70%, 50%)",
-            "loc": 37317
-          },
-          {
-            "name": "plouc",
-            "color": "hsl(226, 70%, 50%)",
-            "loc": 117399
-          }
-        ]
-      },
-      {
-        "name": "text",
-        "color": "hsl(93, 70%, 50%)",
-        "children": [
-          {
-            "name": "trim",
-            "color": "hsl(264, 70%, 50%)",
-            "loc": 38859
-          },
-          {
-            "name": "slugify",
-            "color": "hsl(70, 70%, 50%)",
-            "loc": 114480
-          },
-          {
-            "name": "snakeCase",
-            "color": "hsl(273, 70%, 50%)",
-            "loc": 145625
-          },
-          {
-            "name": "camelCase",
-            "color": "hsl(341, 70%, 50%)",
-            "loc": 147012
-          },
-          {
-            "name": "repeat",
-            "color": "hsl(115, 70%, 50%)",
-            "loc": 124994
-          },
-          {
-            "name": "padLeft",
-            "color": "hsl(348, 70%, 50%)",
-            "loc": 55608
-          },
-          {
-            "name": "padRight",
-            "color": "hsl(331, 70%, 50%)",
-            "loc": 115439
-          },
-          {
-            "name": "sanitize",
-            "color": "hsl(108, 70%, 50%)",
-            "loc": 92286
-          },
-          {
-            "name": "ploucify",
-            "color": "hsl(240, 70%, 50%)",
-            "loc": 127480
-          }
-        ]
-      },
-      {
-        "name": "misc",
-        "color": "hsl(264, 70%, 50%)",
-        "children": [
-          {
-            "name": "whatever",
-            "color": "hsl(213, 70%, 50%)",
-            "children": [
-              {
-                "name": "hey",
-                "color": "hsl(18, 70%, 50%)",
-                "loc": 72649
-              },
-              {
-                "name": "WTF",
-                "color": "hsl(205, 70%, 50%)",
-                "loc": 137258
-              },
-              {
-                "name": "lol",
-                "color": "hsl(134, 70%, 50%)",
-                "loc": 185593
-              },
-              {
-                "name": "IMHO",
-                "color": "hsl(43, 70%, 50%)",
-                "loc": 65789
-              }
-            ]
-          },
-          {
-            "name": "other",
-            "color": "hsl(316, 70%, 50%)",
-            "loc": 82541
-          },
-          {
-            "name": "crap",
-            "color": "hsl(241, 70%, 50%)",
-            "children": [
-              {
-                "name": "crapA",
-                "color": "hsl(126, 70%, 50%)",
-                "loc": 11159
-              },
-              {
-                "name": "crapB",
-                "color": "hsl(109, 70%, 50%)",
-                "children": [
-                  {
-                    "name": "crapB1",
-                    "color": "hsl(259, 70%, 50%)",
-                    "loc": 35424
-                  },
-                  {
-                    "name": "crapB2",
-                    "color": "hsl(179, 70%, 50%)",
-                    "loc": 159556
-                  },
-                  {
-                    "name": "crapB3",
-                    "color": "hsl(130, 70%, 50%)",
-                    "loc": 168792
-                  },
-                  {
-                    "name": "crapB4",
-                    "color": "hsl(326, 70%, 50%)",
-                    "loc": 122558
-                  }
-                ]
-              },
-              {
-                "name": "crapC",
-                "color": "hsl(175, 70%, 50%)",
-                "children": [
-                  {
-                    "name": "crapC1",
-                    "color": "hsl(117, 70%, 50%)",
-                    "loc": 151796
-                  },
-                  {
-                    "name": "crapC2",
-                    "color": "hsl(107, 70%, 50%)",
-                    "loc": 197968
-                  },
-                  {
-                    "name": "crapC3",
-                    "color": "hsl(60, 70%, 50%)",
-                    "loc": 34451
-                  },
-                  {
-                    "name": "crapC4",
-                    "color": "hsl(86, 70%, 50%)",
-                    "loc": 150435
-                  },
-                  {
-                    "name": "crapC5",
-                    "color": "hsl(10, 70%, 50%)",
-                    "loc": 186080
-                  },
-                  {
-                    "name": "crapC6",
-                    "color": "hsl(5, 70%, 50%)",
-                    "loc": 107085
-                  },
-                  {
-                    "name": "crapC7",
-                    "color": "hsl(216, 70%, 50%)",
-                    "loc": 64269
-                  },
-                  {
-                    "name": "crapC8",
-                    "color": "hsl(74, 70%, 50%)",
-                    "loc": 179695
-                  },
-                  {
-                    "name": "crapC9",
-                    "color": "hsl(184, 70%, 50%)",
-                    "loc": 11828
-                  }
-                ]
-              }
-            ]
-          }
-        ]
-      }
-    ]
-};
-
-export class SunburstChartComponent extends Component {
+export class DebrisBreakdownComponent extends Component {
     constructor(props)
     {
         super(props);
         this.state = {
+            location: {},   // {category: "", name: ""}
+            startDate: "",  // ISO date string (YYYY-MM-DD)
+            endDate: "",    // ISO date string (YYYY-MM-DD)
             chartData: {}
         };
     }
@@ -986,15 +567,72 @@ export class SunburstChartComponent extends Component {
     componentDidMount()
     {
         this.setState({
-            chartData: DEFAULT_CHART_DATA
+            chartData: DEFAULT_SUNBURST_DATA
         });
+    }
+
+    setDateRange(startDate, endDate)
+    {
+        console.log("DebrisBreakdown::setDateRange", startDate, endDate);
+        this.setState({
+            "startDate": startDate,
+            "endDate": endDate
+        });
+        this.queryDebrisBreakdown(this.state.location.category, this.state.location.name, startDate, endDate);
+    }
+
+    setLocation(location)
+    {
+        console.log("DebrisBreakdown::setLocation", location);
+        this.setState({
+            "location": {
+                "category": location.category,
+                "name": location.name
+            }
+        });
+        this.queryDebrisBreakdown(location.category, location.name, this.state.startDate, this.state.endDate);
+    }
+
+    queryDebrisBreakdown(locationCategory, locationName, startDate, endDate)
+    {
+        console.log("DebrisBreakdown::queryDebrisBreakdown", locationCategory, locationName, startDate, endDate);
+
+        // TODO: This needs to be implemented.
+
+        // if (locationCategory && locationName && startDate && endDate)
+        // {
+        //     locationName = locationName.trim().replace(/ /g, "%20");
+        //     let url = `http://coa-flask-app-dev.us-east-1.elasticbeanstalk.com/debrisbreakdown`
+        //         + `?locationCategory=` + locationCategory
+        //         + `&locationName=` + locationName
+        //         + `&startDate=` + startDate
+        //         + `&endDate=` + endDate
+        //     console.log("url",  url);
+        //     fetch(url,
+        //         {"method": 'GET', "mode": "cors"}) 
+        //     .then(
+        //         function(results) {
+        //         results.json().then(
+        //             function(data) {
+        //                 console.log(data);
+        //                 this.setState({
+        //                     chartData: data.data
+        //                 });
+        //             }.bind(this));
+        //         }.bind(this)
+        //     , function() { console.log("failed"); });
+        // }
+        // else
+        // {
+        //     console.log("Not enough information to query for debris breakdown statistics.");
+        // }
     }
 
     render() {
         return (
             <div className="nivo-sunburst">
                 <ResponsiveSunburst
-                    data={DEFAULT_SUNBURST_DATA}
+                    data={this.state.chartData}
                     margin={{
                         "top": 40,
                         "right": 20,

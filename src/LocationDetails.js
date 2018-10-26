@@ -90,11 +90,12 @@ class LocationDetails extends Component {
     return (
         <div>
             <Grid fluid>
-                <span>
-                    <h3 className="locDetailsHeading">Location Details </h3>
-                </span>
-                <span>
-                    <Select
+                <Row>
+                    <Col md={2}>
+                        <h3 className="locDetailsHeading">Location Details </h3>
+                    </Col>
+                    <Col md={2}>
+                        <Select
                         bsStyle="default"
                         className="select-location-type"
                         options={this.state.locationTypes}
@@ -102,9 +103,9 @@ class LocationDetails extends Component {
                         defaultValue={{label: "Sites", value: "Sites"}}
                         >
                     </Select>
-                </span>
-                <span>
-                    <Select
+                    </Col>
+                    <Col md={8}>
+                        <Select
                         bsStyle="default"
                         className="select-location"
                         options={this.state.locationOptions}
@@ -113,7 +114,8 @@ class LocationDetails extends Component {
                         placeholder={"Select location..."}
                         >
                     </Select>
-                </span>
+                    </Col>
+                </Row>
             </Grid>
 
             <Panel>

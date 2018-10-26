@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
-
-import { Grid, Row, Col } from "react-bootstrap";
-
-import { FilterComponent } from './FilterComponent';
+import { Grid, Col } from "react-bootstrap";
 import LocationDetails from "./LocationDetails";
 
 import "./Site.css";

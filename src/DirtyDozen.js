@@ -1,13 +1,8 @@
 import React, { Component } from 'react';
-import { Table, Panel, Grid, Row, Col } from 'react-bootstrap';
-
+import { Table, Grid} from 'react-bootstrap';
 import { ResponsiveBar } from '@nivo/bar'
-import { ResponsivePie } from '@nivo/pie'
-
-import { DateRangeComponent } from './DateRange'
 
 import './DirtyDozen.css';
-
 
 const DEFAULT_DATA = {
     "Paper Clip": 2815,

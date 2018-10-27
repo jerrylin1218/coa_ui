@@ -44,6 +44,17 @@ class LocationDetails extends Component {
                     results.json().then(this.updateLocationOptions.bind(this));
                 }.bind(this)
                 , function() { console.log("Failed to hit back-end service."); });
+
+                
+        //TODO: axiom request for stuff
+        fetch(`http://coa-flask-app-dev.us-east-1.elasticbeanstalk.com/locations`,
+                {"method": 'GET', "mode": "cors"}) 
+            .then(
+                function(results) {
+                    console.log("hello");
+                    results.json().then(this.updateLocations.bind(this));
+                }.bind(this)
+                , function() { console.log("Failed to hit back-end service."); });
     }
 
     updateLocationOptions(data)
@@ -66,6 +77,7 @@ class LocationDetails extends Component {
     updateLocations(data)
     {
         console.log("LocationDetails::updateLocations", data);
+        data = data.locations;
         let allLocations = data.reduce((obj, curr)=>{
             obj[curr.locationCategory] = curr.locationNames;
             return obj;
@@ -90,7 +102,7 @@ class LocationDetails extends Component {
         // need to also select the right value in the Select dropdown
         // this.handleLocationChanged({value: data.site_names[2]});
         
-        this.selectLocationCategory.setValue({label: "Site", value: "site"});
+        // this.selectLocationCategory.setValue({label: "Site", value: "site"});
     }
 
     handleLocationCategoryChanged(selection, action)
@@ -99,7 +111,7 @@ class LocationDetails extends Component {
         this.setState({
             locationOptions: transformSiteNamesToSelectOptions(this.state.allLocations[selection.value])
         });
-        this.selectLocation.clearValue();
+        // this.selectLocation.clearValue();
     }
 
     handleLocationChanged(selection, action)
@@ -126,23 +138,24 @@ class LocationDetails extends Component {
     }
 
     render() {
-        return (
-            <div>
-                <Grid fluid>
-                    <span>
+    return (
+        <div>
+            <Grid fluid>
+                <Row>
+                    <Col md={2}>
                         <h3 className="locDetailsHeading">Location Details </h3>
-                    </span>
-                    <span>
+                    </Col>
+                    <Col md={2}>
                         <Select
                             className="select-location-category"
                             options={this.state.locationCategories}
                             onChange={this.handleLocationCategoryChanged.bind(this)}
                             ref={(selectLocationCategory) => { this.selectLocationCategory = selectLocationCategory; }}
                             placeholder={"Select location type..."}
-                            >
-                        </Select>
-                    </span>
-                    <span>
+                        >
+                    </Select>
+                    </Col>
+                    <Col md={8}>
                         <Select
                             className="select-location"
                             options={this.state.locationOptions}
@@ -151,11 +164,11 @@ class LocationDetails extends Component {
                             placeholder={"Select location..."}
                             >
                         </Select>
-                    </span>
-                </Grid>
-
+                    </Col>
+                </Row>
+            </Grid>
                 <Panel>
-                    <Panel.Heading>Debris Breakdown</Panel.Heading>
+                <Panel.Heading>Debris Breakdown</Panel.Heading>
                     <Panel.Body>
                         <Grid fluid>
                             <Row>

@@ -49,7 +49,7 @@ export class DateRangeComponent extends Component {
     render() {
       return (
         <div className="date-range">
-            <span><h4>Date Range:</h4></span>
+            <span><h4>Date Range</h4></span>
             <span>
                 <Select
                     bsStyle="default"

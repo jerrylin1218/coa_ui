@@ -6,7 +6,7 @@ import Select from 'react-select';
 import { FilterComponent } from './FilterComponent';
 import { DirtyDozenComponent } from './DirtyDozen';
 import { DebrisBreakdownComponent } from './DebrisBreakdown';
-import { LineChartComponent } from './LineChart';
+import { HistoricalTrendsComponent } from './HistoricalTrendsChart';
 
 import "./LocationDetails.css"
 import { DateRangeComponent } from './DateRange';
@@ -89,44 +89,52 @@ class LocationDetails extends Component {
     render() {
     return (
         <div>
-            <Grid fluid>
-                <Row>
-                    <Col md={2}>
-                        <h3 className="locDetailsHeading">Location Details </h3>
-                    </Col>
-                    <Col md={2}>
-                        <Select
-                        bsStyle="default"
-                        className="select-location-type"
-                        options={this.state.locationTypes}
-                        placeholder={"Select location type..."}
-                        defaultValue={{label: "Sites", value: "Sites"}}
-                        >
-                    </Select>
-                    </Col>
-                    <Col md={8}>
-                        <Select
-                        bsStyle="default"
-                        className="select-location"
-                        options={this.state.locationOptions}
-                        onChange={this.handleLocationChanged.bind(this)}
-                        ref={(selectLocation) => { this.selectLocation = selectLocation; }}
-                        placeholder={"Select location..."}
-                        >
-                    </Select>
-                    </Col>
-                </Row>
-            </Grid>
+          <Panel>
+            <Panel.Body>
+              <Grid fluid>
+                  <Row>
+                      <Col md={2}>
+                          <h3 className="locDetailsHeading">Location Details</h3>
+                      </Col>
+                      <Col md={2}>
+                          <Select
+                          bsStyle="default"
+                          className="select-location-type"
+                          options={this.state.locationTypes}
+                          placeholder={"Select location type..."}
+                          defaultValue={{label: "Sites", value: "Sites"}}
+                          >
+                      </Select>
+                      </Col>
+                      <Col md={8}>
+                          <Select
+                          bsStyle="default"
+                          className="select-location"
+                          options={this.state.locationOptions}
+                          onChange={this.handleLocationChanged.bind(this)}
+                          ref={(selectLocation) => { this.selectLocation = selectLocation; }}
+                          placeholder={"Select location..."}
+                          >
+                      </Select>
+                      </Col>
+                  </Row>
+              </Grid>
+            </Panel.Body>
+          </Panel>
 
             <Panel>
                 <Panel.Heading>Debris Breakdown</Panel.Heading>
                 <Panel.Body>
                     <Grid fluid>
                         <Row>
+                          <Panel>
+                            <Panel.Body>
                             <Col md={12}>
                                 <DateRangeComponent
                                     onDateRangeChanged={this.handleDateRangeChanged.bind(this)}/>
                             </Col>
+                            </Panel.Body>
+                          </Panel>
                         </Row>
                         <Row>
                             <Col md={6} >
@@ -152,12 +160,12 @@ class LocationDetails extends Component {
                   </Panel.Body>
               </Panel>
               <Panel>
-                  <Panel.Heading>Historical Trends</Panel.Heading>
+                  <Panel.Heading>Historical View</Panel.Heading>
                   <Panel.Body>
                       <Grid fluid>
                           <Row>
                               <Col md={9}>
-                                  <LineChartComponent/>
+                                  <HistoricalTrendsComponent/>
                               </Col>
                               <Col md={3}>
                                   <FilterComponent/>

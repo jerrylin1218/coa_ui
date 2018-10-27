@@ -6,7 +6,7 @@ import Select from 'react-select';
 import { FilterComponent } from './FilterComponent';
 import { DirtyDozenComponent } from './DirtyDozen';
 import { DebrisBreakdownComponent } from './DebrisBreakdown';
-import { LineChartComponent } from './LineChart';
+import { HistoricalTrendsComponent } from './HistoricalTrendsChart';
 
 import "./LocationDetails.css"
 import { DateRangeComponent } from './DateRange';
@@ -111,84 +111,93 @@ class LocationDetails extends Component {
     render() {
     return (
         <div>
-            <Grid fluid>
-                <Row>
-                    <Col md={2}>
-                        <h3 className="locDetailsHeading">Location Details </h3>
-                    </Col>
-                    <Col md={2}>
-                        <Select
+          <Panel>
+            <Panel.Body>
+              <Grid fluid>
+                  <Row>
+                      <Col md={2}>
+                          <h3 className="locDetailsHeading">Location Details</h3>
+                      </Col>
+                      <Col md={2}>
+                         <Select
                             className="select-location-category"
                             options={this.state.locationCategories}
                             onChange={this.handleLocationCategoryChanged.bind(this)}
                             ref={(selectLocationCategory) => { this.selectLocationCategory = selectLocationCategory; }}
                             placeholder={"Select location type..."}
                         >
-                    </Select>
-                    </Col>
-                    <Col md={8}>
-                        <Select
+                        </Select>
+                      </Col>
+                      <Col md={8}>
+                          <Select
                             className="select-location"
                             options={this.state.locationOptions}
                             onChange={this.handleLocationChanged.bind(this)}
                             ref={(selectLocation) => { this.selectLocation = selectLocation; }}
                             placeholder={"Select location..."}
                             >
-                        </Select>
-                    </Col>
-                </Row>
-            </Grid>
-                <Panel>
+                          </Select>
+                      </Col>
+                  </Row>
+              </Grid>
+            </Panel.Body>
+          </Panel>
+
+            <Panel>
                 <Panel.Heading>Debris Breakdown</Panel.Heading>
-                    <Panel.Body>
-                        <Grid fluid>
-                            <Row>
-                                <Col md={12}>
-                                    <DateRangeComponent
-                                        onDateRangeChanged={this.handleDateRangeChanged.bind(this)}/>
-                                </Col>
-                            </Row>
-                            <Row>
-                                <Col md={6} >
-                                    <Panel>
-                                        <Panel.Heading>Hierarchy</Panel.Heading>
-                                        <Panel.Body>
-                                            <DebrisBreakdownComponent
-                                            ref={(debrisBreakdown) => {this.debrisBreakdown = debrisBreakdown; }}/>
-                                        </Panel.Body>
-                                    </Panel>
-                                </Col>
-                                <Col md={6}>
-                                    <Panel>
-                                        <Panel.Heading>Dirty Dozen</Panel.Heading>
-                                        <Panel.Body>
-                                            <DirtyDozenComponent
-                                                ref={(dirtyDozen) => {this.dirtyDozen = dirtyDozen; }}/>
-                                        </Panel.Body>
-                                    </Panel>
-                                </Col>
-                            </Row>
-                        </Grid>
-                    </Panel.Body>
-                </Panel>
-                <Panel>
-                    <Panel.Heading>Historical Trends</Panel.Heading>
-                    <Panel.Body>
-                        <Grid fluid>
-                            <Row>
-                                <Col md={9}>
-                                    <LineChartComponent/>
-                                </Col>
-                                <Col md={3}>
-                                    <FilterComponent/>
-                                </Col>
-                            </Row>
-                        </Grid>
-                    </Panel.Body>
-                </Panel>
-            </div>
-        );
-    }
+                <Panel.Body>
+                    <Grid fluid>
+                        <Row>
+                          <Panel>
+                            <Panel.Body>
+                            <Col md={12}>
+                                <DateRangeComponent
+                                    onDateRangeChanged={this.handleDateRangeChanged.bind(this)}/>
+                            </Col>
+                            </Panel.Body>
+                          </Panel>
+                        </Row>
+                        <Row>
+                            <Col md={6} >
+                                <Panel>
+                                    <Panel.Heading>Hierarchy</Panel.Heading>
+                                    <Panel.Body>
+                                        <DebrisBreakdownComponent
+                                          ref={(debrisBreakdown) => {this.debrisBreakdown = debrisBreakdown; }}/>
+                                    </Panel.Body>
+                                </Panel>
+                            </Col>
+                            <Col md={6}>
+                                <Panel>
+                                    <Panel.Heading>Dirty Dozen</Panel.Heading>
+                                    <Panel.Body>
+                                        <DirtyDozenComponent
+                                            ref={(dirtyDozen) => {this.dirtyDozen = dirtyDozen; }}/>
+                                    </Panel.Body>
+                                </Panel>
+                            </Col>
+                         </Row>
+                     </Grid>
+                  </Panel.Body>
+              </Panel>
+              <Panel>
+                  <Panel.Heading>Historical View</Panel.Heading>
+                  <Panel.Body>
+                      <Grid fluid>
+                          <Row>
+                              <Col md={9}>
+                                  <HistoricalTrendsComponent/>
+                              </Col>
+                              <Col md={3}>
+                                  <FilterComponent/>
+                              </Col>
+                          </Row>
+                      </Grid>
+                  </Panel.Body>
+              </Panel>
+          </div>
+    );
+  }
 }
 
 export default LocationDetails;

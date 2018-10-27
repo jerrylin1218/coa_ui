@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 
-import { Grid, Col } from "react-bootstrap";
+import { Grid, Col, Panel } from "react-bootstrap";
 
 import { FilterComponent } from './FilterComponent';
-import { HistoricalTrendsChart } from './HistoricalTrendsChart';
+import { HistoricalTrendsComponent } from './HistoricalTrendsChart';
 
 import "./Trends.css";
 
@@ -11,16 +11,21 @@ export class Trends extends Component {
   render() {
     return (
       <Grid fluid>
-        <Col xs={11}>
-          <div>
-            <HistoricalTrendsChart> </HistoricalTrendsChart>
-          </div>
-        </Col>
-        <Col xs={1}>
-          <div>
-            <FilterComponent />
-          </div>
-        </Col>
+        <Panel>
+          <Panel.Heading>Historical Trends</Panel.Heading>
+          <Panel.Body>
+            <Col md={9}>
+              <div>
+                <HistoricalTrendsComponent/>
+              </div>
+            </Col>
+            <Col md={3}>
+              <div>
+                <FilterComponent />
+              </div>
+            </Col>
+          </Panel.Body>
+        </Panel>
       </Grid>
     );
   }

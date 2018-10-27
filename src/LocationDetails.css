@@ -24,11 +24,9 @@
 }
 
 .select-location {
-    max-width: 800px;
-    display: inline;
+    max-width: 800px;   
 }
 
-.select-location-type {
-    max-width: 200px;
-    display: inline;
+.select-location-category {
+    max-width: 250px;
 }

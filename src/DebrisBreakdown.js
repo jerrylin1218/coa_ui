@@ -584,13 +584,15 @@ export class DebrisBreakdownComponent extends Component {
     setLocation(location)
     {
         console.log("DebrisBreakdown::setLocation", location);
-        this.setState({
-            "location": {
-                "category": location.category,
-                "name": location.name
-            }
-        });
-        this.queryDebrisBreakdown(location.category, location.name, this.state.startDate, this.state.endDate);
+        if (location) {
+            this.setState({
+                "location": {
+                    "category": location.category,
+                    "name": location.name
+                }
+            });
+            this.queryDebrisBreakdown(location.category, location.name, this.state.startDate, this.state.endDate);
+        }
     }
 
     queryDebrisBreakdown(locationCategory, locationName, startDate, endDate)

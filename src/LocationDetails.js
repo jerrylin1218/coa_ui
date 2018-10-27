@@ -12,56 +12,95 @@ import "./LocationDetails.css"
 import { DateRangeComponent } from './DateRange';
 
 const transformSiteNamesToSelectOptions =
-  (data) => { return data.map((name)=>{ return {label: name, value: name}; }); };
+    (data) => { return data.map((name)=>{ return {label: name, value: name}; }); };
 
 class LocationDetails extends Component {
     
-  constructor(props)
-  {
-    super(props);
-    this.state = {
-      locationOptions: [{
-        label: "Sites",
-        options: []
-      }],
-      locationTypes: [{
-        label: "Sites",
-        value: "Sites"
-      }],
-      dirtyDozen: undefined,      // Component for 12 most common debris items
-      debrisBreakdown: undefined  // Component for hierarchical breakdown of debris items
-    };
-  }
+    constructor(props)
+    {
+        super(props);
+        this.state = {
+        locationOptions: [{
+            label: "Sites",
+            options: []
+        }],
+        locationCategories: [{
+            label: "Sites",
+            value: "Sites"
+        }],
+        dirtyDozen: undefined,      // Component for 12 most common debris items
+        debrisBreakdown: undefined  // Component for hierarchical breakdown of debris items
+        };
+    }
 
-  componentDidMount()
-  {
-    //TODO: axiom request for stuff
-    fetch(`http://coa-flask-app-dev.us-east-1.elasticbeanstalk.com/getsitesdropdownlist`,
-            {"method": 'GET', "mode": "cors"}) 
-          .then(
-              function(results) {
-                console.log("hello");
-                results.json().then(this.updateLocationOptions.bind(this));
-              }.bind(this)
-            , function() { console.log("Failed to hit back-end service."); });
-  }
+    componentDidMount()
+    {
+        //TODO: axiom request for stuff
+        fetch(`http://coa-flask-app-dev.us-east-1.elasticbeanstalk.com/getsitesdropdownlist`,
+                {"method": 'GET', "mode": "cors"}) 
+            .then(
+                function(results) {
+                    console.log("hello");
+                    results.json().then(this.updateLocationOptions.bind(this));
+                }.bind(this)
+                , function() { console.log("Failed to hit back-end service."); });
+    }
 
-  updateLocationOptions(data)
-  {
-    console.log("LocationDetails::updateLocationOptions", data);
-    this.setState({
-      locationOptions: [
-        {
-          label: "Sites",
-          options: transformSiteNamesToSelectOptions(data.site_names)
-        }
-      ],
-      // location: {label: data.site_names[2], value: data.site_names[2]}
-    });
-    // TODO: remove -- this just provides a valid start-up value to populate the screen
-    // need to also select the right value in the Select dropdown
-    // this.handleLocationChanged({value: data.site_names[2]});
-  }
+    updateLocationOptions(data)
+    {
+        console.log("LocationDetails::updateLocationOptions", data);
+        this.setState({
+            locationOptions: [
+                {
+                label: "Sites",
+                options: transformSiteNamesToSelectOptions(data.site_names)
+                }
+            ],
+        // location: {label: data.site_names[2], value: data.site_names[2]}
+        });
+        // TODO: remove -- this just provides a valid start-up value to populate the screen
+        // need to also select the right value in the Select dropdown
+        // this.handleLocationChanged({value: data.site_names[2]});
+    }
+
+    updateLocations(data)
+    {
+        console.log("LocationDetails::updateLocations", data);
+        let allLocations = data.reduce((obj, curr)=>{
+            obj[curr.locationCategory] = curr.locationNames;
+            return obj;
+        }, {});
+        let locationCategories = data.map((locationObj)=>{
+            return { "label": locationObj.locationLabel, "value": locationObj.locationCategory };
+        });
+        let siteLocationCategory = data.reduce((obj, curr)=>{
+            if (curr.locationCategory === "site") {
+                obj.label = curr.locationLabel;
+                obj.value = curr.locationCategory;
+            }
+        }, {});
+        let siteLocationOptions = transformSiteNamesToSelectOptions(allLocations["site"]);
+        this.setState({
+            allLocations: allLocations,
+            locationOptions: siteLocationOptions,
+            locationCategories: locationCategories
+        // location: {label: data.site_names[2], value: data.site_names[2]}
+        });
+        // TODO: remove -- this just provides a valid start-up value to populate the screen
+        // need to also select the right value in the Select dropdown
+        // this.handleLocationChanged({value: data.site_names[2]});
+        
+        this.selectLocationCategory.setValue({label: "Site", value: "site"});
+    }
+
+    handleLocationCategoryChanged(selection, action)
+    {
+        console.log("LocationDetails::handleLocationCategoryChanged", selection, action);
+        this.setState({
+            locationOptions: transformSiteNamesToSelectOptions(this.state.allLocations[selection.value])
+        });
+        this.selectLocation.clearValue();
+    }
 
     handleLocationChanged(selection, action)
     {
@@ -87,86 +126,85 @@ class LocationDetails extends Component {
     }
 
     render() {
-    return (
-        <div>
-            <Grid fluid>
-                <span>
-                    <h3 className="locDetailsHeading">Location Details </h3>
-                </span>
-                <span>
-                    <Select
-                        bsStyle="default"
-                        className="select-location-type"
-                        options={this.state.locationTypes}
-                        placeholder={"Select location type..."}
-                        defaultValue={{label: "Sites", value: "Sites"}}
-                        >
-                    </Select>
-                </span>
-                <span>
-                    <Select
-                        bsStyle="default"
-                        className="select-location"
-                        options={this.state.locationOptions}
-                        onChange={this.handleLocationChanged.bind(this)}
-                        ref={(selectLocation) => { this.selectLocation = selectLocation; }}
-                        placeholder={"Select location..."}
-                        >
-                    </Select>
-                </span>
-            </Grid>
+        return (
+            <div>
+                <Grid fluid>
+                    <span>
+                        <h3 className="locDetailsHeading">Location Details </h3>
+                    </span>
+                    <span>
+                        <Select
+                            className="select-location-category"
+                            options={this.state.locationCategories}
+                            onChange={this.handleLocationCategoryChanged.bind(this)}
+                            ref={(selectLocationCategory) => { this.selectLocationCategory = selectLocationCategory; }}
+                            placeholder={"Select location type..."}
+                            >
+                        </Select>
+                    </span>
+                    <span>
+                        <Select
+                            className="select-location"
+                            options={this.state.locationOptions}
+                            onChange={this.handleLocationChanged.bind(this)}
+                            ref={(selectLocation) => { this.selectLocation = selectLocation; }}
+                            placeholder={"Select location..."}
+                            >
+                        </Select>
+                    </span>
+                </Grid>
 
-            <Panel>
-                <Panel.Heading>Debris Breakdown</Panel.Heading>
-                <Panel.Body>
-                    <Grid fluid>
-                        <Row>
-                            <Col md={12}>
-                                <DateRangeComponent
-                                    onDateRangeChanged={this.handleDateRangeChanged.bind(this)}/>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col md={6} >
-                                <Panel>
-                                    <Panel.Heading>Hierarchy</Panel.Heading>
-                                    <Panel.Body>
-                                        <DebrisBreakdownComponent
-                                          ref={(debrisBreakdown) => {this.debrisBreakdown = debrisBreakdown; }}/>
-                                    </Panel.Body>
-                                </Panel>
-                            </Col>
-                            <Col md={6}>
-                                <Panel>
-                                    <Panel.Heading>Dirty Dozen</Panel.Heading>
-                                    <Panel.Body>
-                                        <DirtyDozenComponent
-                                            ref={(dirtyDozen) => {this.dirtyDozen = dirtyDozen; }}/>
-                                    </Panel.Body>
-                                </Panel>
-                            </Col>
-                         </Row>
-                     </Grid>
-                  </Panel.Body>
-              </Panel>
-              <Panel>
-                  <Panel.Heading>Historical Trends</Panel.Heading>
-                  <Panel.Body>
-                      <Grid fluid>
-                          <Row>
-                              <Col md={9}>
-                                  <LineChartComponent/>
-                              </Col>
-                              <Col md={3}>
-                                  <FilterComponent/>
-                              </Col>
-                          </Row>
-                      </Grid>
-                  </Panel.Body>
-              </Panel>
-          </div>
-    );
-  }
+                <Panel>
+                    <Panel.Heading>Debris Breakdown</Panel.Heading>
+                    <Panel.Body>
+                        <Grid fluid>
+                            <Row>
+                                <Col md={12}>
+                                    <DateRangeComponent
+                                        onDateRangeChanged={this.handleDateRangeChanged.bind(this)}/>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col md={6} >
+                                    <Panel>
+                                        <Panel.Heading>Hierarchy</Panel.Heading>
+                                        <Panel.Body>
+                                            <DebrisBreakdownComponent
+                                            ref={(debrisBreakdown) => {this.debrisBreakdown = debrisBreakdown; }}/>
+                                        </Panel.Body>
+                                    </Panel>
+                                </Col>
+                                <Col md={6}>
+                                    <Panel>
+                                        <Panel.Heading>Dirty Dozen</Panel.Heading>
+                                        <Panel.Body>
+                                            <DirtyDozenComponent
+                                                ref={(dirtyDozen) => {this.dirtyDozen = dirtyDozen; }}/>
+                                        </Panel.Body>
+                                    </Panel>
+                                </Col>
+                            </Row>
+                        </Grid>
+                    </Panel.Body>
+                </Panel>
+                <Panel>
+                    <Panel.Heading>Historical Trends</Panel.Heading>
+                    <Panel.Body>
+                        <Grid fluid>
+                            <Row>
+                                <Col md={9}>
+                                    <LineChartComponent/>
+                                </Col>
+                                <Col md={3}>
+                                    <FilterComponent/>
+                                </Col>
+                            </Row>
+                        </Grid>
+                    </Panel.Body>
+                </Panel>
+            </div>
+        );
+    }
 }
 
 export default LocationDetails;

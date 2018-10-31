@@ -8,4 +8,5 @@ export default () =>
   <Switch>
     <Route path="/site" exact component={Site} />
     <Route path="/trends" exact component={Trends} />
+    <Route path="/about" component={() => window.location = "http://www.cleanoceanaction.org/index.php?id=2"}/>
   </Switch>;

@@ -23,10 +23,11 @@ export class DateRangeComponent extends Component {
 
     componentDidMount()
     {
-        //TODO: axiom request for stuff
+        //TODO: axiom request for valid date range
         this.setState({
             selections: []
         });
+        this.props.onDateRangeChanged(this.state.startDate, this.state.endDate);
     }
 
     onMinDateChanged(selection)

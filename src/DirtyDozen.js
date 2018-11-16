@@ -36,7 +36,7 @@ function transformDirtyDozenDataForTable(data)
     for (let key in data)
     {
         tableData.push((
-        <tr>
+        <tr key={i}>
             <td>{i}</td>
             <td>{key}</td>
             <td>{data[key]}</td>
@@ -113,15 +113,7 @@ export class DirtyDozenComponent extends Component {
                 {"method": 'GET', "mode": "cors"}) 
             .then(
                 function(results) {
-                console.log("hello");
-                results.json().then(
-                    function(data) {
-                        console.log(data);
-                        this.setState({
-                            tableItems: transformDirtyDozenDataForTable(data.items),
-                            nivoBarChartData: transformDirtyDozenDataForBarChart(data.items)
-                        });
-                    }.bind(this));
+                    results.json().then(this.handleDirtyDozenData.bind(this))
                 }.bind(this)
             , function() { console.log("failed"); });
         }
@@ -131,101 +123,110 @@ export class DirtyDozenComponent extends Component {
         }
     }
 
-        render() {
-            return (
-                <Grid fluid>
-                    <div className="nivo-bar">
-                    <ResponsiveBar
-                        data={this.state.nivoBarChartData}
-                        height={260}
-                        keys={[
-                            "count",
-                        ]}
-                        indexBy="item"
-                        margin={{
-                            "top": 20,
-                            "right": 60,
-                            "bottom": 100,
-                            "left": 60
-                        }}
-                        layout="vertical"
-                        padding={0.3}
-                        colors="#0073FF"
-                        colorBy="id"
-                        defs={[]}
-                        fill={[
-                            {
-                                "match": {
-                                    "id": "count"
-                                },
-                                "id": "lines"
-                            }
-                        ]}
-                        borderColor="#ff8000"
-                        axisBottom={{
-                            "orient": "bottom",
-                            "tickSize": 5,
-                            "tickPadding": 5,
-                            "tickRotation": 45,
-                            "legend": "Items",
-                            "legendPosition": "middle",
-                            "legendOffset": 85
-                        }}
-                        axisLeft={{
-                            "orient": "left",
-                            "tickSize": 5,
-                            "tickPadding": 5,
-                            "tickRotation": 0,
-                            "legend": "Count",
-                            "legendPosition": "middle",
-                            "legendOffset": -45
-                        }}
-                        enableGridX={false}
-                        enableGridY={false}
-                        labelSkipWidth={12}
-                        labelSkipHeight={12}
-                        labelTextColor="inherit:darker(1.6)"
-                        animate={true}
-                        motionStiffness={90}
-                        motionDamping={15}
-                        legends={[
-                            // {
-                            //     "dataFrom": "keys",
-                            //     "anchor": "bottom-right",
-                            //     "direction": "column",
-                            //     "translateX": 120,
-                            //     "itemWidth": 100,
-                            //     "itemHeight": 20,
-                            //     "itemsSpacing": 2,
-                            //     "symbolSize": 20
-                            // }
-                        ]}
-                        theme={{
-                            "tooltip": {
-                                "container": {
-                                    "fontSize": "13px"
-                                }
+    handleDirtyDozenData(data)
+    {
+        console.log(data);
+        this.setState({
+            tableItems: transformDirtyDozenDataForTable(data.items),
+            nivoBarChartData: transformDirtyDozenDataForBarChart(data.items)
+        });
+    }
+
+    render() {
+        return (
+            <Grid fluid>
+                <div className="nivo-bar">
+                <ResponsiveBar
+                    data={this.state.nivoBarChartData}
+                    height={260}
+                    keys={[
+                        "count",
+                    ]}
+                    indexBy="item"
+                    margin={{
+                        "top": 20,
+                        "right": 60,
+                        "bottom": 100,
+                        "left": 60
+                    }}
+                    layout="vertical"
+                    padding={0.3}
+                    colors="#0073FF"
+                    colorBy="id"
+                    defs={[]}
+                    fill={[
+                        {
+                            "match": {
+                                "id": "count"
                             },
-                            "labels": {
-                                "textColor": "#444"
+                            "id": "lines"
+                        }
+                    ]}
+                    borderColor="#ff8000"
+                    axisBottom={{
+                        "orient": "bottom",
+                        "tickSize": 5,
+                        "tickPadding": 5,
+                        "tickRotation": 45,
+                        "legend": "Items",
+                        "legendPosition": "middle",
+                        "legendOffset": 85
+                    }}
+                    axisLeft={{
+                        "orient": "left",
+                        "tickSize": 5,
+                        "tickPadding": 5,
+                        "tickRotation": 0,
+                        "legend": "Count",
+                        "legendPosition": "middle",
+                        "legendOffset": -45
+                    }}
+                    enableGridX={false}
+                    enableGridY={false}
+                    labelSkipWidth={12}
+                    labelSkipHeight={12}
+                    labelTextColor="inherit:darker(1.6)"
+                    animate={true}
+                    motionStiffness={90}
+                    motionDamping={15}
+                    legends={[
+                        // {
+                        //     "dataFrom": "keys",
+                        //     "anchor": "bottom-right",
+                        //     "direction": "column",
+                        //     "translateX": 120,
+                        //     "itemWidth": 100,
+                        //     "itemHeight": 20,
+                        //     "itemsSpacing": 2,
+                        //     "symbolSize": 20
+                        // }
+                    ]}
+                    theme={{
+                        "tooltip": {
+                            "container": {
+                                "fontSize": "13px"
                             }
-                        }}
-                        />
-                    </div>
-                    <Table condensed responsive bordered>
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Debris Item</th>
-                                <th>Count</th>
-                                <th>% Total</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {this.state.tableItems}
-                        </tbody>
-                    </Table>
-                </Grid>
-            );
-        }
+                        },
+                        "labels": {
+                            "textColor": "#444"
+                        }
+                    }}
+                    />
+                </div>
+                <Table condensed responsive bordered>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Debris Item</th>
+                            <th>Count</th>
+                            <th>% Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {this.state.tableItems}
+                    </tbody>
+                </Table>
+            </Grid>
+        );
+    }
 }

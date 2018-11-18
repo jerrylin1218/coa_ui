@@ -4,27 +4,31 @@ import { ResponsiveBar } from '@nivo/bar'
 
 import './DirtyDozen.css';
 
-const DEFAULT_DATA = {
-    "Paper Clip": 2815,
-    "Plastic Bag": 2210,
-    "Pencil": 1536,
-    "Plastic Cup": 1453,
-    "Cigarette Butts": 1211,
-    "Soda Cans": 1001,
-    "Bottle Caps": 985,
-    "Batteries": 580,
-    "Paper": 495,
-    "Glass Bottles": 382,
-    "Screws": 64,
-    "Clothing": 28
-};
+const DEFAULT_DATA = [
+    {
+        "itemName": "Paper Clip",
+        "itemCount": 2815,
+        "percentage": 12.5
+    },
+    {
+        "itemName": "Plastic Bag",
+        "itemCount": 2210,
+        "percentage": 10.1
+    },
+    {
+        "itemName": "Cigarette Butts",
+        "itemCount": 20,
+        "percentage": 2.3
+    }
+];
 
 function transformDirtyDozenDataForBarChart(data)
 {
     let barChartData = [];
-    for (let key in data)
+    for (let i = 0; i < data.length; ++i)
     {
-        barChartData.push({"item": key, "count": data[key]});
+        let item = data[i];
+        barChartData.push({"item": item.itemName, "count": item.count});
     }
     return barChartData;
 }
@@ -32,27 +36,19 @@ function transformDirtyDozenDataForBarChart(data)
 function transformDirtyDozenDataForTable(data)
 {
     let tableData = [];
-    let i = 1;
-    for (let key in data)
+    for (let i = 0; i < data.length; ++i)
     {
+        let item = data[i];
         tableData.push((
         <tr key={i}>
             <td>{i}</td>
-            <td>{key}</td>
-            <td>{data[key]}</td>
-            <td>{roundToOneDecimalPercentage(data[key])}</td>
+            <td>{item.itemName}</td>
+            <td>{item.count}</td>
+            <td>{item.percentage.toFixed(1)}</td>
         </tr>));
-        i++;
     }
     return tableData;
 }
-
-function roundToOneDecimalPercentage(value)
-{
-    const numberOfDecimals = 1;
-    return Math.round(value * (10 * numberOfDecimals)) / (10 * numberOfDecimals);
-}
-
 
 export class DirtyDozenComponent extends Component {
     constructor(props)
@@ -104,6 +100,7 @@ export class DirtyDozenComponent extends Component {
         {
             locationName = locationName.trim().replace(/ /g, "%20");
             let url = `http://coa-flask-app-dev.us-east-1.elasticbeanstalk.com/dirtydozen`
+                //`http://127.0.0.1:5000/dirtydozen`    // Used when hitting local flask app
                 + `?locationCategory=` + locationCategory
                 + `&locationName=` + locationName
                 + `&startDate=` + startDate
@@ -126,9 +123,13 @@ export class DirtyDozenComponent extends Component {
     handleDirtyDozenData(data)
     {
         console.log(data);
+        let dirtyDozen = data.dirtydozen.map((item) => {
+            item.itemName = item.itemName ? item.itemName : item.categoryName;
+            return item;
+        });
         this.setState({
-            tableItems: transformDirtyDozenDataForTable(data.items),
-            nivoBarChartData: transformDirtyDozenDataForBarChart(data.items)
+            tableItems: transformDirtyDozenDataForTable(dirtyDozen),
+            nivoBarChartData: transformDirtyDozenDataForBarChart(dirtyDozen)
         });
     }
 

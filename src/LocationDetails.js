@@ -45,7 +45,19 @@ class LocationDetails extends Component {
                     console.log("hello");
                     results.json().then(this.updateLocations.bind(this));
                 }.bind(this)
-                , function() { console.log("Failed to hit back-end service."); });
+            ).catch(
+                function() {
+                    console.log("Failed to fetch location from deployed service... trying to hit the api locally.");
+                    fetch(`http://127.0.0.1:5000/locations`,
+                            {"method": 'GET', "mode": "cors"})
+                        .then(
+                            function(results) {
+                                console.log("hello");
+                                results.json().then(this.updateLocations.bind(this));
+                            }.bind(this)
+                        ).catch(function() { console.log("Failed to hit back-end service for location details."); })
+                }.bind(this)
+            );
     }
 
     updateLocations(data)
@@ -74,9 +86,12 @@ class LocationDetails extends Component {
             locationCategory: siteLocationCategory,
             locationCategories: locationCategories
         });
-        
-        this.dirtyDozen.setLocation(this.state.location.value);
-        this.debrisBreakdown.setLocation(this.state.location.value);
+        let value = {
+            "category": this.state.locationCategory.value,
+            "name": this.state.location.value
+        };
+        this.dirtyDozen.setLocation(value);
+        this.debrisBreakdown.setLocation(value);
         this.dirtyDozen.setDateRange(this.state.startDate, this.state.endDate);
         this.debrisBreakdown.setDateRange(this.state.startDate, this.state.endDate);
     }
@@ -90,8 +105,12 @@ class LocationDetails extends Component {
             location: locationOptions[0],
             locationOptions: locationOptions
         });
-        this.dirtyDozen.setLocation(this.state.location.value);
-        this.debrisBreakdown.setLocation(this.state.location.value);
+        let value = {
+            "category": selection.value,
+            "name": this.state.location.value
+        };
+        this.dirtyDozen.setLocation(value);
+        this.debrisBreakdown.setLocation(value);
     }
 
     handleLocationChanged(selection, action)
@@ -100,8 +119,12 @@ class LocationDetails extends Component {
         this.setState({
             location: selection
         });
-        this.dirtyDozen.setLocation(selection.value);
-        this.debrisBreakdown.setLocation(selection.value);
+        let value = {
+            "category": this.state.locationCategory.value,
+            "name": selection.value
+        };
+        this.dirtyDozen.setLocation(value);
+        this.debrisBreakdown.setLocation(value);
     }
 
     handleDateRangeChanged(startDate, endDate)
@@ -164,7 +187,10 @@ class LocationDetails extends Component {
                             <Panel.Body>
                             <Col md={12}>
                                 <DateRangeComponent
-                                    onDateRangeChanged={this.handleDateRangeChanged.bind(this)}/>
+                                    onDateRangeChanged={this.handleDateRangeChanged.bind(this)}
+                                    ref={(dateRangeComponent) => { this.dateRangeComponent = dateRangeComponent; }}
+                                    >
+                                </DateRangeComponent>
                             </Col>
                             </Panel.Body>
                         </Panel>

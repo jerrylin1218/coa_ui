@@ -41,7 +41,7 @@ function transformDirtyDozenDataForTable(data)
         let item = data[i];
         tableData.push((
         <tr key={i}>
-            <td>{i}</td>
+            <td>{i + 1}</td>
             <td>{item.itemName}</td>
             <td>{item.count}</td>
             <td>{item.percentage.toFixed(1)}</td>
@@ -86,11 +86,11 @@ export class DirtyDozenComponent extends Component {
         console.log("DirtyDozen::setLocation", location);
         this.setState({
             "location": {
-                "category": "site",
-                "name": location
+                "category": location.category,
+                "name": location.name
             }
         });
-        this.queryDirtyDozen("site", location, this.state.startDate, this.state.endDate);
+        this.queryDirtyDozen(location.category, location.name, this.state.startDate, this.state.endDate);
     }
 
     queryDirtyDozen(locationCategory, locationName, startDate, endDate)
@@ -99,20 +99,28 @@ export class DirtyDozenComponent extends Component {
         if (locationCategory && locationName && startDate && endDate)
         {
             locationName = locationName.trim().replace(/ /g, "%20");
-            let url = `http://coa-flask-app-dev.us-east-1.elasticbeanstalk.com/dirtydozen`
-                //`http://127.0.0.1:5000/dirtydozen`    // Used when hitting local flask app
+            let url = `http://coa-flask-app-dev.us-east-1.elasticbeanstalk.com`
+            let tail = `/dirtydozen`
                 + `?locationCategory=` + locationCategory
                 + `&locationName=` + locationName
                 + `&startDate=` + startDate
                 + `&endDate=` + endDate
             console.log("url",  url);
-            fetch(url,
+            fetch(url + tail,
                 {"method": 'GET', "mode": "cors"}) 
             .then(
                 function(results) {
                     results.json().then(this.handleDirtyDozenData.bind(this))
                 }.bind(this)
-            , function() { console.log("failed"); });
+            ).catch(
+                function() {
+                    console.log("Failed to hit deployed service for dirty dozen api, trying to hit the api locally.");
+                    fetch(`http://127.0.0.1:5000` + tail, {"method": 'GET', "mode": "cors"})
+                        .then(function(results) {
+                            results.json().then(this.handleDirtyDozenData.bind(this))
+                        }.bind(this))
+                }.bind(this)
+            );
         }
         else
         {

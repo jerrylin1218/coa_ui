@@ -90,10 +90,8 @@ class LocationDetails extends Component {
             "category": this.state.locationCategory.value,
             "name": this.state.location.value
         };
-        this.dirtyDozen.setLocation(value);
-        this.debrisBreakdown.setLocation(value);
-        this.dirtyDozen.setDateRange(this.state.startDate, this.state.endDate);
-        this.debrisBreakdown.setDateRange(this.state.startDate, this.state.endDate);
+        this.setLocation(value);
+        this.setDateRange(this.state.startDate, this.state.endDate);
     }
 
     handleLocationCategoryChanged(selection, action)
@@ -109,8 +107,7 @@ class LocationDetails extends Component {
             "category": selection.value,
             "name": this.state.location.value
         };
-        this.dirtyDozen.setLocation(value);
-        this.debrisBreakdown.setLocation(value);
+        this.setLocation(value);
     }
 
     handleLocationChanged(selection, action)
@@ -123,8 +120,7 @@ class LocationDetails extends Component {
             "category": this.state.locationCategory.value,
             "name": selection.value
         };
-        this.dirtyDozen.setLocation(value);
-        this.debrisBreakdown.setLocation(value);
+        this.setLocation(value);
     }
 
     handleDateRangeChanged(startDate, endDate)
@@ -134,11 +130,23 @@ class LocationDetails extends Component {
             "startDate": startDate,
             "endDate": endDate
         });
-        if (this.dirtyDozen) {
-            this.dirtyDozen.setDateRange(startDate, endDate);
-        }
+        this.setDateRange(startDate, endDate);
+    }
+
+    setLocation(location)
+    {
+        this.dateRangeComponent.setLocation(location);
+        this.debrisBreakdown.setLocation(location);
+        this.dirtyDozen.setLocation(location);
+    }
+
+    setDateRange(startDate, endDate)
+    {
         if (this.debrisBreakdown) {
             this.debrisBreakdown.setDateRange(startDate, endDate);
+        }
+        if (this.dirtyDozen) {
+            this.dirtyDozen.setDateRange(startDate, endDate);
         }
     }
 

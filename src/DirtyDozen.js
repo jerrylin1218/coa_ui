@@ -33,17 +33,22 @@ function transformDirtyDozenDataForBarChart(data)
     return barChartData;
 }
 
+function numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
 function transformDirtyDozenDataForTable(data)
 {
     let tableData = [];
     for (let i = 0; i < data.length; ++i)
     {
         let item = data[i];
+        let count = item.count ? numberWithCommas(item.count) : 0;
         tableData.push((
         <tr key={i}>
             <td>{i + 1}</td>
             <td>{item.itemName}</td>
-            <td>{item.count}</td>
+            <td>{count}</td>
             <td>{item.percentage.toFixed(1)}</td>
         </tr>));
     }
@@ -105,21 +110,20 @@ export class DirtyDozenComponent extends Component {
                 + `&locationName=` + locationName
                 + `&startDate=` + startDate
                 + `&endDate=` + endDate
-            console.log("url",  url);
-            fetch(url + tail,
-                {"method": 'GET', "mode": "cors"}) 
-            .then(
+            let responseHandler = 
                 function(results) {
                     results.json().then(this.handleDirtyDozenData.bind(this))
-                }.bind(this)
-            ).catch(
+                }.bind(this);
+            fetch(url + tail,
+                {"method": 'GET', "mode": "cors"}) 
+            .then(responseHandler)
+            .catch(
                 function() {
                     console.log("Failed to hit deployed service for dirty dozen api, trying to hit the api locally.");
                     fetch(`http://127.0.0.1:5000` + tail, {"method": 'GET', "mode": "cors"})
-                        .then(function(results) {
-                            results.json().then(this.handleDirtyDozenData.bind(this))
-                        }.bind(this))
-                }.bind(this)
+                    .then(responseHandler)
+                    .catch(function() {"Failed to execute query for dirty dozen"});
+                }
             );
         }
         else

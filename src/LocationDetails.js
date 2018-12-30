@@ -42,7 +42,6 @@ class LocationDetails extends Component {
                 {"method": 'GET', "mode": "cors"}) 
             .then(
                 function(results) {
-                    console.log("hello");
                     results.json().then(this.updateLocations.bind(this));
                 }.bind(this)
             ).catch(
@@ -52,7 +51,6 @@ class LocationDetails extends Component {
                             {"method": 'GET', "mode": "cors"})
                         .then(
                             function(results) {
-                                console.log("hello");
                                 results.json().then(this.updateLocations.bind(this));
                             }.bind(this)
                         ).catch(function() { console.log("Failed to hit back-end service for location details."); })

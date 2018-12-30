@@ -149,7 +149,7 @@ export class DateRangeComponent extends Component {
 
         let seasonIdx = 0;
         let season = SEASON_ORDER[seasonIdx];
-        let year = parseInt(firstDate.substr(0, 4));
+        let year = parseInt(firstDate.substr(0, 4), 10);
         let seasonDate = this.getStartDateOption(season, year).value;
         
         if (firstDate < seasonDate) {

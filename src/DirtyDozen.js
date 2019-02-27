@@ -164,7 +164,7 @@ export class DirtyDozenComponent extends Component {
                     }}
                     layout="vertical"
                     padding={0.3}
-                    colors="#0073FF"
+                    colors="#a6cee3"
                     colorBy="id"
                     defs={[]}
                     fill={[

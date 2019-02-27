@@ -3,6 +3,11 @@ import { ResponsiveSunburst } from '@nivo/sunburst'
 
 import './DebrisBreakdown.css';
 
+const EMPTY_SUNBURST_DATA = {
+    "name": "debris",
+    "children": []
+};
+
 const DEFAULT_SUNBURST_DATA = {
     "name": "debris",
     "children": [
@@ -567,7 +572,7 @@ export class DebrisBreakdownComponent extends Component {
     componentDidMount()
     {
         this.setState({
-            chartData: DEFAULT_SUNBURST_DATA
+            chartData: EMPTY_SUNBURST_DATA
         });
     }
 
@@ -601,33 +606,41 @@ export class DebrisBreakdownComponent extends Component {
 
         // TODO: This needs to be implemented.
 
-        // if (locationCategory && locationName && startDate && endDate)
-        // {
-        //     locationName = locationName.trim().replace(/ /g, "%20");
-        //     let url = `http://coa-flask-app-dev.us-east-1.elasticbeanstalk.com/debrisbreakdown`
-        //         + `?locationCategory=` + locationCategory
-        //         + `&locationName=` + locationName
-        //         + `&startDate=` + startDate
-        //         + `&endDate=` + endDate
-        //     console.log("url",  url);
-        //     fetch(url,
-        //         {"method": 'GET', "mode": "cors"}) 
-        //     .then(
-        //         function(results) {
-        //         results.json().then(
-        //             function(data) {
-        //                 console.log(data);
-        //                 this.setState({
-        //                     chartData: data.data
-        //                 });
-        //             }.bind(this));
-        //         }.bind(this)
-        //     , function() { console.log("failed"); });
-        // }
-        // else
-        // {
-        //     console.log("Not enough information to query for debris breakdown statistics.");
-        // }
+        if (locationCategory && locationName && startDate && endDate)
+        {
+            locationName = locationName.trim().replace(/ /g, "%20");
+            let url = `http://coa-flask-app-dev.us-east-1.elasticbeanstalk.com/breakdown`
+                + `?locationCategory=` + locationCategory
+                + `&locationName=` + locationName
+                + `&startDate=` + startDate
+                + `&endDate=` + endDate
+            console.log("url",  url);
+            fetch(url,
+                {"method": 'GET', "mode": "cors"}) 
+            .then(
+                function(results) {
+                results.json().then(
+                    function(data) {
+                        console.log(data);
+                        this.setState({
+                            chartData: data.data
+                        });
+                    }.bind(this));
+                }.bind(this)
+            , function() {
+                console.log("failed to query breakdown api, resolving to default data");
+                this.setState({
+                    chartData: DEFAULT_SUNBURST_DATA
+                });
+            });
+        }
+        else
+        {
+            console.log("Not enough information to query for debris breakdown statistics.");
+            this.setState({
+                chartData: EMPTY_SUNBURST_DATA
+            });
+        }
     }
 
     render() {
@@ -646,7 +659,7 @@ export class DebrisBreakdownComponent extends Component {
                     cornerRadius={2}
                     borderWidth={1}
                     borderColor="white"
-                    colors="yellow_green_blue"
+                    colors="paired"
                     colorBy="id"
                     childColor="inherit"
                     animate={true}

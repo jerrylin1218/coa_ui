@@ -103,7 +103,7 @@ class LocationDetails extends Component {
         });
         let value = {
             "category": selection.value,
-            "name": this.state.location.value
+            "name": locationOptions[0].value
         };
         this.setLocation(value);
     }

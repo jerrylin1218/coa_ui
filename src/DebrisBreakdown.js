@@ -632,7 +632,7 @@ export class DebrisBreakdownComponent extends Component {
                 this.setState({
                     chartData: DEFAULT_SUNBURST_DATA
                 });
-            });
+            }.bind(this));
         }
         else
         {

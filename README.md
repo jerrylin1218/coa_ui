@@ -18,4 +18,4 @@ You can find the most recent version of this guide [here](https://github.com/fac
 
 # View the Site
 
-The site can be viewed out http://coa-ui.s3-website.us-east-2.amazonaws.com/site
+The site can be viewed at http://coa-ui.s3-website.us-east-2.amazonaws.com/site

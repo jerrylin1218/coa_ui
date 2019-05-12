@@ -14,28 +14,16 @@ const SEASONS = {
         startDay: '03-01',
         endDay: '05-31',
     },
-    "SUMMER": {
-        label: "Summer",
-        startDay: '06-01',
-        endDay: '08-31',
-    },
     "FALL": {
         label: "Fall",
         startDay: '09-01',
         endDay: '11-30',
-    },
-    "WINTER": {
-        label: "Winter",
-        startDay: '12-01',
-        endDay: '02-28',    // ignoring leap year
     }
 };
 
 const SEASON_ORDER = [
     SEASONS.SPRING,
-    SEASONS.SUMMER,
-    SEASONS.FALL,
-    SEASONS.WINTER
+    SEASONS.FALL
 ];
 
 export class DateRangeComponent extends Component {

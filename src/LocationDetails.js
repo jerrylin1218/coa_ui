@@ -8,8 +8,14 @@ import { DirtyDozenComponent } from './DirtyDozen';
 import { DebrisBreakdownComponent } from './DebrisBreakdown';
 import { HistoricalTrendsComponent } from './HistoricalTrendsChart';
 
-import "./LocationDetails.css"
+import "./LocationDetails.css";
 import { DateRangeComponent } from './DateRange';
+
+import { getData } from "./BackendAccessor.js";
+
+const COUNTY_STR = "county";
+const TOWN_STR = "town";
+const SITE_STR = "site";
 
 function transformLocationsOptions(data) {
     let transformedData = data.map(transformForOption);
@@ -39,34 +45,24 @@ class LocationDetails extends Component {
     componentDidMount()
     {
         console.log("componentDidMount");
-        let data = {"Atlantic" : {"Atlantic City" : ["Atlantic City", "Test Site Name"] }}
-        this.updateLocations(data);
-        /*
-        fetch(`http://coa-flask-app-dev.us-east-1.elasticbeanstalk.com/locations`,
-                {"method": 'GET', "mode": "cors"}) 
-            .then(
-                function(results) {
-                    results.json().then(this.updateLocations.bind(this));
-                }.bind(this)
-            ).catch(
-                function() {
-                    console.log("Failed to fetch location from deployed service... trying to hit the api locally.");
-                    fetch(`http://127.0.0.1:5000/locations`,
-                            {"method": 'GET', "mode": "cors"})
-                        .then(
-                            function(results) {
-                                results.json().then(this.updateLocations.bind(this));
-                            }.bind(this)
-                        ).catch(function() { console.log("Failed to hit back-end service for location details."); })
-                }.bind(this)
-            );
-        */
+
+        const url = "locationsHierarchy";
+        getData(url) 
+            .then((results) => {
+                console.log("locationsHierarchy results=", results);
+                results.json().then(this.updateLocations.bind(this));
+            }).catch(() => {
+                console.log("ERROR - Failed to execute query to retrieve locations.");
+            });
     }
 
     updateLocations(data)
     {
         console.log("LocationDetails::updateLocations", data);
-        let allLocations = data;
+        let allLocations = data.locationsHierarchy;
+
+        console.log("LocationDetails::allLocations", allLocations);
+
         let defaultCounty = Object.keys(allLocations)[0];
         
         this.setState({
@@ -76,7 +72,7 @@ class LocationDetails extends Component {
         
         console.log("this.state.allLocation", this.state.allLocations);
 
-        this.setLocation("County", defaultCounty);
+        this.setLocation(COUNTY_STR, defaultCounty);
         this.setDateRange(this.state.startDate, this.state.endDate);
     }
     
@@ -89,7 +85,7 @@ class LocationDetails extends Component {
             currentSite: undefined
         });
 
-        this.setLocation("County", selection.value);
+        this.setLocation(COUNTY_STR, selection.value);
     }
 
     handleTownChanged(selection, action)
@@ -100,7 +96,7 @@ class LocationDetails extends Component {
             currentSite: undefined
         });
 
-        this.setLocation("Town", selection.value);
+        this.setLocation(TOWN_STR, selection.value);
     }
 
     handleSiteChanged(selection, action)
@@ -110,7 +106,7 @@ class LocationDetails extends Component {
             currentSite: selection.value
         });
 
-        this.setLocation("Site", selection.value);
+        this.setLocation(SITE_STR, selection.value);
     }
 
     handleDateRangeChanged(startDate, endDate)

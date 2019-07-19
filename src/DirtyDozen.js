@@ -104,12 +104,13 @@ export class DirtyDozenComponent extends Component {
         if (locationCategory && locationName && startDate && endDate)
         {
             locationName = locationName.trim().replace(/ /g, "%20");
-            let url = `http://coa-flask-app-dev.us-east-1.elasticbeanstalk.com`
+            let url = `http://coa-flask-app-dev.us-east-1.elasticbeanstalk.com`;
+            let localUrl = `http://127.0.0.1:5000`;
             let tail = `/dirtydozen`
                 + `?locationCategory=` + locationCategory
                 + `&locationName=` + locationName
                 + `&startDate=` + startDate
-                + `&endDate=` + endDate
+                + `&endDate=` + endDate;
             let responseHandler = 
                 function(results) {
                     results.json().then(this.handleDirtyDozenData.bind(this))
@@ -120,7 +121,7 @@ export class DirtyDozenComponent extends Component {
             .catch(
                 function() {
                     console.log("Failed to hit deployed service for dirty dozen api, trying to hit the api locally.");
-                    fetch(`http://127.0.0.1:5000` + tail, {"method": 'GET', "mode": "cors"})
+                    fetch(localUrl + tail, {"method": 'GET', "mode": "cors"})
                     .then(responseHandler)
                     .catch(function() {"Failed to execute query for dirty dozen"});
                 }

@@ -609,30 +609,40 @@ export class DebrisBreakdownComponent extends Component {
         if (locationCategory && locationName && startDate && endDate)
         {
             locationName = locationName.trim().replace(/ /g, "%20");
-            let url = `http://coa-flask-app-dev.us-east-1.elasticbeanstalk.com/breakdown`
+            let url = `http://coa-flask-app-dev.us-east-1.elasticbeanstalk.com`;
+            let localUrl = `http://127.0.0.1:5000`;
+            let tail = `/breakdown`
                 + `?locationCategory=` + locationCategory
                 + `&locationName=` + locationName
                 + `&startDate=` + startDate
-                + `&endDate=` + endDate
-            console.log("url",  url);
-            fetch(url,
-                {"method": 'GET', "mode": "cors"}) 
-            .then(
+                + `&endDate=` + endDate;
+            console.log("url",  url + tail);
+            let responseHandler = 
                 function(results) {
-                results.json().then(
-                    function(data) {
-                        console.log(data);
-                        this.setState({
-                            chartData: data.data
+                    results.json().then(
+                        function(data) {
+                            console.log(data);
+                            this.setState({
+                                chartData: data.data
+                            });
+                        }.bind(this));
+                }.bind(this);
+            fetch(url + tail,
+                {"method": 'GET', "mode": "cors"}) 
+            .then(responseHandler)
+            .catch(
+                function() {
+                    console.log("Failed to hit deployed service for breakdown api, trying to hit the api locally.");
+                        fetch(localUrl + tail, {"method": 'GET', "mode": "cors"})
+                        .then(responseHandler)
+                        .catch(function() {
+                            console.log("failed to query breakdown api, resolving to default data");
+                            this.setState({
+                                chartData: DEFAULT_SUNBURST_DATA
+                            });
                         });
-                    }.bind(this));
-                }.bind(this)
-            , function() {
-                console.log("failed to query breakdown api, resolving to default data");
-                this.setState({
-                    chartData: DEFAULT_SUNBURST_DATA
-                });
-            }.bind(this));
+                }
+            );
         }
         else
         {

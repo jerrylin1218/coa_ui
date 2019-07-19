@@ -38,7 +38,10 @@ class LocationDetails extends Component {
 
     componentDidMount()
     {
-        fetch(`http://coa-flask-app-dev.us-east-1.elasticbeanstalk.com/locations`,
+        let url = `http://coa-flask-app-dev.us-east-1.elasticbeanstalk.com`;
+        let localUrl = `http://127.0.0.1:5000`;
+        let tail = `/locations`;
+        fetch(url + tail,
                 {"method": 'GET', "mode": "cors"}) 
             .then(
                 function(results) {
@@ -47,7 +50,7 @@ class LocationDetails extends Component {
             ).catch(
                 function() {
                     console.log("Failed to fetch location from deployed service... trying to hit the api locally.");
-                    fetch(`http://127.0.0.1:5000/locations`,
+                    fetch(localUrl + tail,
                             {"method": 'GET', "mode": "cors"})
                         .then(
                             function(results) {

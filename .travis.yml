@@ -1,11 +1,16 @@
 dist: xenial
+
 language: node_js
+
 node_js:
     - node
+
 install:
-    - npm install
+    - make install-deps
+
 script:
-    - npm run build
+    - make prod-run
+
 deploy:
     provider: s3
     bucket: "coa-ui"

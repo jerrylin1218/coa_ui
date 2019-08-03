@@ -11,12 +11,18 @@ The react frontend for the COA website.
 ```
 sudo apt install npm
 make install-deps
+
+# Or with docker
+sudo apt install docker
 ```
 
 2. Run the application
 
 ```
 make run
+
+# Or with docker
+make prod-run
 ```
 
 ## View the Site

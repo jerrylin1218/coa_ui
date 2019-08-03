@@ -4,6 +4,7 @@ help:
 	@echo "    help:         Prints this screen"
 	@echo "    install-deps: Installs dependencies"
 	@echo "    run:          Run the react frontend in a dev mode"
+	@echo "    build:        Build the react frontend for deployment"
 	@echo "    prod-build:   Build the docker image for the prod mode"
 	@echo "    prod-run:     Run the prod mode"
 	@echo "    clean:        Clean out temporaries"
@@ -16,6 +17,10 @@ install-deps:
 .PHONY: run
 run: install-deps
 	npm start
+
+.PHONY: build
+build:
+	npm run build
 
 .PHONY: prod-build
 prod-build:

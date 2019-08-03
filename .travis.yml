@@ -9,7 +9,7 @@ install:
     - make install-deps
 
 script:
-    - make prod-run
+    - make build
 
 deploy:
     provider: s3

@@ -232,7 +232,7 @@ export class DirtyDozenComponent extends Component {
                         <tr>
                             <th>#</th>
                             <th>Debris Item</th>
-                            <th>Material Name</th>
+                            <th>Material</th>
                             <th>Count</th>
                             <th>% Total</th>
                         </tr>

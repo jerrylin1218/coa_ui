@@ -84,7 +84,6 @@ class LocationDetails extends Component {
             currentTown: undefined,
             currentSite: undefined
         });
-
         this.setLocation(COUNTY_STR, selection.value);
     }
 

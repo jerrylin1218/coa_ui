@@ -357,27 +357,6 @@ const DEFAULT_SUNBURST_DATA = {
                     ]
                 },
                 {
-                    "name": "Cigarettes",
-                    "children": [
-                        {
-                            "name": "Lighers",
-                            "count": 6
-                        },
-                        {
-                            "name": "Packaging",
-                            "count": 120
-                        },
-                        {
-                            "name": "Filters",
-                            "count": 1238
-                        },
-                        {
-                            "name": "Cigar Tips",
-                            "count": 36
-                        }
-                    ]
-                },
-                {
                     "name": "Homegoods",
                     "children": [
                         {

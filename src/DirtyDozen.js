@@ -50,6 +50,7 @@ function transformDirtyDozenDataForTable(data)
         <tr key={i}>
             <td>{i + 1}</td>
             <td>{item.itemName}</td>
+            <td>{item.materialName}</td>
             <td>{count}</td>
             <td>{item.percentage.toFixed(1)}</td>
         </tr>));
@@ -225,6 +226,7 @@ export class DirtyDozenComponent extends Component {
                         <tr>
                             <th>#</th>
                             <th>Debris Item</th>
+                            <th>Material</th>
                             <th>Count</th>
                             <th>% Total</th>
                         </tr>

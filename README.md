@@ -1,42 +1,30 @@
-# Getting Started
-To start adding features to this app, clone the repo then install all the required packages
-```
-$ npm install
-```
+# Frontend of COA
 
-Once the installation has successfully completed, run
-```
-$ npm start
-```
+[![Build Status](https://travis-ci.com/CleanOceanAction/coa_ui.svg?branch=master)](https://travis-ci.com/CleanOceanAction/coa_ui)
 
-# Deployment
-This project is set up for deployment to an AWS s3 bucket following [this tutorial](https://medium.com/ovrsea/deploy-automatically-a-react-app-on-amazon-s3-iam-within-minutes-da6cb0096d55).
+The react frontend for the COA website.
 
-[Install](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html) 'aws cli'.
-Once installed, configure aws in your local environment to have the correct credentials for publishing to s3 by running
-```
-$ aws configure
-```
-You will be prompted for an access key id and secret access key, which can be given to you by the owners of this project.
-You do not need to fill out any other options.
+## Getting Started
 
-To build the application to a deployment ready state, run
+1. Install the dependencies
+
 ```
-$ npm run build
+sudo apt install npm
+make install-deps
+
+# Or with docker
+sudo apt install docker
 ```
 
-Once the build has successfully completed, run
+2. Run the application
+
 ```
-$ npm run deploy
+make run
+
+# Or with docker
+make prod-run
 ```
 
-# References
+## View the Site
 
-This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
-
-Below you will find some information on how to perform common tasks.<br>
-You can find the most recent version of this guide [here](https://github.com/facebookincubator/create-react-app/blob/master/packages/react-scripts/template/README.md).
-
-# View the Site
-
-The site can be viewed at http://coa-ui.s3-website.us-east-2.amazonaws.com/site
+The site can be viewed locally [here](localhost:3000/site) or deployed [here](http://coa-ui.s3-website.us-east-2.amazonaws.com/site).

@@ -3,6 +3,8 @@ import Select from 'react-select';
 
 import './DateRange.css';
 
+import { getData } from "./BackendAccessor.js";
+
 const defaultOptions = [
     { value: "2018-01-01", label: "Spring 2018" },
     { value: "2018-08-01", label: "Fall 2018" }
@@ -87,29 +89,18 @@ export class DateRangeComponent extends Component {
             return;
         }
 
-        let url = `http://coa-flask-app-dev.us-east-1.elasticbeanstalk.com`
-        let tail = `/validdaterange`
+        let url = `validdaterange`
             + `?locationCategory=` + locationCategory
-            + `&locationName=` + locationName
+            + `&locationName=` + locationName;
 
-        let responseHandler =
-            function(results) {
-                results.json().then(this.handleValidDateRangeResponse.bind(this));
-            }.bind(this);
-
-        fetch(url + tail,
-            {"method": 'GET', "mode": "cors"}) 
-        .then(responseHandler)
-        .catch(
-            function() {
-                console.log("Failed to hit deployed service for dirty dozen api, trying to hit the api locally.");
-                fetch(`http://127.0.0.1:5000` + tail, {"method": 'GET', "mode": "cors"})
-                .then(responseHandler)
-                .catch(function(){
-                    console.log("Failed to execute query for valid date range.")
-                });
-            }
-        );
+        getData(url)
+        .then((results) => {
+            console.log("DateRange results=", results);
+            results.json().then(this.handleValidDateRangeResponse.bind(this));
+        })
+        .catch(() => {
+            console.log("Failed to execute query for valid date range.");
+        });
     }
 
     getStartDateOption(season, year)

@@ -3,6 +3,8 @@ import { ResponsiveSunburst } from '@nivo/sunburst'
 
 import './DebrisBreakdown.css';
 
+import { getData } from "./BackendAccessor.js";
+
 const EMPTY_SUNBURST_DATA = {
     "name": "debris",
     "children": []
@@ -355,27 +357,6 @@ const DEFAULT_SUNBURST_DATA = {
                     ]
                 },
                 {
-                    "name": "Cigarettes",
-                    "children": [
-                        {
-                            "name": "Lighers",
-                            "count": 6
-                        },
-                        {
-                            "name": "Packaging",
-                            "count": 120
-                        },
-                        {
-                            "name": "Filters",
-                            "count": 1238
-                        },
-                        {
-                            "name": "Cigar Tips",
-                            "count": 36
-                        }
-                    ]
-                },
-                {
                     "name": "Homegoods",
                     "children": [
                         {
@@ -609,30 +590,26 @@ export class DebrisBreakdownComponent extends Component {
         if (locationCategory && locationName && startDate && endDate)
         {
             locationName = locationName.trim().replace(/ /g, "%20");
-            let url = `http://coa-flask-app-dev.us-east-1.elasticbeanstalk.com/breakdown`
+            let url = `breakdown`
                 + `?locationCategory=` + locationCategory
                 + `&locationName=` + locationName
                 + `&startDate=` + startDate
                 + `&endDate=` + endDate
             console.log("url",  url);
-            fetch(url,
-                {"method": 'GET', "mode": "cors"}) 
-            .then(
-                function(results) {
-                results.json().then(
-                    function(data) {
-                        console.log(data);
-                        this.setState({
-                            chartData: data.data
-                        });
-                    }.bind(this));
-                }.bind(this)
-            , function() {
-                console.log("failed to query breakdown api, resolving to default data");
+            getData(url)
+            .then((results) => {
+                results.json().then((data) => {
+                    console.log(data);
+                    this.setState({
+                        chartData: data.data
+                    });
+                })
+            }).catch(() => {
+                console.log("Failed to query breakdown api, resolving to default data");
                 this.setState({
                     chartData: DEFAULT_SUNBURST_DATA
                 });
-            }.bind(this));
+            });
         }
         else
         {

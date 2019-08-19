@@ -4,6 +4,8 @@ import { ResponsiveBar } from '@nivo/bar'
 
 import './DirtyDozen.css';
 
+import { getData } from "./BackendAccessor.js";
+
 const DEFAULT_DATA = [
     {
         "itemName": "Paper Clip",
@@ -105,27 +107,19 @@ export class DirtyDozenComponent extends Component {
         if (locationCategory && locationName && startDate && endDate)
         {
             locationName = locationName.trim().replace(/ /g, "%20");
-            let url = `http://coa-flask-app-dev.us-east-1.elasticbeanstalk.com`
-            let tail = `/dirtydozen`
+            let tail = `dirtydozen`
                 + `?locationCategory=` + locationCategory
                 + `&locationName=` + locationName
                 + `&startDate=` + startDate
                 + `&endDate=` + endDate
-            let responseHandler = 
-                function(results) {
-                    results.json().then(this.handleDirtyDozenData.bind(this))
-                }.bind(this);
-            fetch(url + tail,
-                {"method": 'GET', "mode": "cors"}) 
-            .then(responseHandler)
-            .catch(
-                function() {
-                    console.log("Failed to hit deployed service for dirty dozen api, trying to hit the api locally.");
-                    fetch(`http://127.0.0.1:5000` + tail, {"method": 'GET', "mode": "cors"})
-                    .then(responseHandler)
-                    .catch(function() {"Failed to execute query for dirty dozen"});
-                }
-            );
+
+            getData(tail) 
+            .then((results) => {
+                results.json().then(this.handleDirtyDozenData.bind(this))
+            })
+            .catch(() => {
+                console.log("Failed to execute query for dirty dozen");
+            });
         }
         else
         {

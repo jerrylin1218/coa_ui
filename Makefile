@@ -15,7 +15,7 @@ install-deps:
 	npm install
 
 .PHONY: run
-run: install-deps
+run:
 	npm start
 
 .PHONY: build

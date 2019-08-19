@@ -8,29 +8,35 @@ import { DirtyDozenComponent } from './DirtyDozen';
 import { DebrisBreakdownComponent } from './DebrisBreakdown';
 import { HistoricalTrendsComponent } from './HistoricalTrendsChart';
 
-import "./LocationDetails.css"
+import "./LocationDetails.css";
 import { DateRangeComponent } from './DateRange';
 
-const transformSiteNamesToSelectOptions =
-    (data) => { return data.map((name)=>{ return {label: name, value: name}; }); };
+import { getData } from "./BackendAccessor.js";
 
+const COUNTY_STR = "county";
+const TOWN_STR = "town";
+const SITE_STR = "site";
+
+function transformLocationsOptions(data) {
+    let transformedData = data.map(transformForOption);
+    console.debug("transformLocationsOptions", transformedData);
+    return transformedData;
+}
+
+function transformForOption(data) {
+    if (data === undefined) return undefined;
+    return {label: data, value: data};
+}
 class LocationDetails extends Component {
     
     constructor(props)
     {
         super(props);
         this.state = {
-            allLocations: undefined,        // All locations and categories to be retrieved from database
-            location: undefined,            // Selected location
-            locationCategory: undefined,    // Selected location category
-            locationOptions: [{
-                label: "Sites",
-                options: []
-            }],
-            locationCategories: [{
-                label: "Sites",
-                value: "Sites"
-            }],
+            allLocations: {},        // All locations and categories to be retrieved from database
+            currentCounty: undefined,
+            currentTown: undefined,
+            currentSite: undefined,
             dirtyDozen: undefined,          // Component for 12 most common debris items
             debrisBreakdown: undefined      // Component for hierarchical breakdown of debris items
         };
@@ -38,87 +44,68 @@ class LocationDetails extends Component {
 
     componentDidMount()
     {
-        fetch(`http://coa-flask-app-dev.us-east-1.elasticbeanstalk.com/locations`,
-                {"method": 'GET', "mode": "cors"}) 
-            .then(
-                function(results) {
-                    results.json().then(this.updateLocations.bind(this));
-                }.bind(this)
-            ).catch(
-                function() {
-                    console.log("Failed to fetch location from deployed service... trying to hit the api locally.");
-                    fetch(`http://127.0.0.1:5000/locations`,
-                            {"method": 'GET', "mode": "cors"})
-                        .then(
-                            function(results) {
-                                results.json().then(this.updateLocations.bind(this));
-                            }.bind(this)
-                        ).catch(function() { console.log("Failed to hit back-end service for location details."); })
-                }.bind(this)
-            );
+        console.log("componentDidMount");
+
+        const url = "locationsHierarchy";
+        getData(url) 
+            .then((results) => {
+                console.log("locationsHierarchy results=", results);
+                results.json().then(this.updateLocations.bind(this));
+            }).catch(() => {
+                console.log("ERROR - Failed to execute query to retrieve locations.");
+            });
     }
 
     updateLocations(data)
     {
         console.log("LocationDetails::updateLocations", data);
-        data = data.locations;
-        let allLocations = data.reduce((obj, curr)=>{
-            obj[curr.locationCategory] = curr.locationNames;
-            return obj;
-        }, {});
-        let locationCategories = data.map((locationObj)=>{
-            return { "label": locationObj.locationLabel, "value": locationObj.locationCategory };
-        });
-        let siteLocationCategory = data.reduce((obj, curr)=>{
-            if (curr.locationCategory === "site") {
-                obj.label = curr.locationLabel;
-                obj.value = curr.locationCategory;
-            }
-            return obj;
-        }, {});
-        let siteLocationOptions = transformSiteNamesToSelectOptions(allLocations["site"]);
+        let allLocations = data.locationsHierarchy;
+
+        console.log("LocationDetails::allLocations", allLocations);
+
+        let defaultCounty = Object.keys(allLocations)[0];
+        
         this.setState({
             allLocations: allLocations,
-            location: siteLocationOptions[2],   // Defaulting to 3rd option in array: 16th Ave Beach.
-            locationOptions: siteLocationOptions,
-            locationCategory: siteLocationCategory,
-            locationCategories: locationCategories
+            currentCounty: defaultCounty,
         });
-        let value = {
-            "category": this.state.locationCategory.value,
-            "name": this.state.location.value
-        };
-        this.setLocation(value);
+        
+        console.log("this.state.allLocation", this.state.allLocations);
+
+        this.setLocation(COUNTY_STR, defaultCounty);
         this.setDateRange(this.state.startDate, this.state.endDate);
     }
-
-    handleLocationCategoryChanged(selection, action)
+    
+    handleCountyChanged(selection, action)
     {
-        console.log("LocationDetails::handleLocationCategoryChanged", selection, action);
-        let locationOptions = transformSiteNamesToSelectOptions(this.state.allLocations[selection.value]);
+        console.log("LocationDetails::handleCountyChanged", selection, action);
         this.setState({
-            locationCategory: selection,
-            location: locationOptions[0],
-            locationOptions: locationOptions
+            currentCounty: selection.value,
+            currentTown: undefined,
+            currentSite: undefined
         });
-        let value = {
-            "category": selection.value,
-            "name": locationOptions[0].value
-        };
-        this.setLocation(value);
+        this.setLocation(COUNTY_STR, selection.value);
     }
 
-    handleLocationChanged(selection, action)
+    handleTownChanged(selection, action)
     {
-        console.log("LocationDetails::handleLocationChanged", selection, action);
-        this.setState({
-            location: selection
+       console.log("LocationDetails::handleTownChanged", selection, action);
+       this.setState({
+            currentTown: selection.value,
+            currentSite: undefined
         });
-        let value = {
-            "category": this.state.locationCategory.value,
-            "name": selection.value
-        };
-        this.setLocation(value);
+
+        this.setLocation(TOWN_STR, selection.value);
+    }
+
+    handleSiteChanged(selection, action)
+    {
+       console.log("LocationDetails::handleSiteChanged", selection, action);
+       this.setState({
+            currentSite: selection.value
+        });
+
+        this.setLocation(SITE_STR, selection.value);
     }
 
     handleDateRangeChanged(startDate, endDate)
@@ -131,11 +118,15 @@ class LocationDetails extends Component {
         this.setDateRange(startDate, endDate);
     }
 
-    setLocation(location)
+    setLocation(locationCategory, location)
     {
-        this.dateRangeComponent.setLocation(location);
-        this.debrisBreakdown.setLocation(location);
-        this.dirtyDozen.setLocation(location);
+        let value = {
+            "category": locationCategory,
+            "name": location
+        };
+        this.dateRangeComponent.setLocation(value);
+        this.debrisBreakdown.setLocation(value);
+        this.dirtyDozen.setLocation(value);
     }
 
     setDateRange(startDate, endDate)
@@ -160,23 +151,34 @@ class LocationDetails extends Component {
                         </Col>
                         <Col md={2}>
                             <Select
-                                className="select-location-category"
-                                options={this.state.locationCategories}
-                                value={this.state.locationCategory}
-                                onChange={this.handleLocationCategoryChanged.bind(this)}
-                                ref={(selectLocationCategory) => { this.selectLocationCategory = selectLocationCategory; }}
-                                placeholder={"Select category..."}
+                                className="select-county"
+                                options={transformLocationsOptions(Object.keys(this.state.allLocations))}
+                                value={transformForOption(this.state.currentCounty)}
+                                onChange={this.handleCountyChanged.bind(this)}
+                                ref={(selectCounty) => { this.selectCounty = selectCounty; }}
+                                placeholder={"Select County"}
                             >
                             </Select>
                         </Col>
-                        <Col md={8}>
+                        <Col md={2}>
                             <Select
-                                className="select-location"
-                                options={this.state.locationOptions}
-                                value={this.state.location}
-                                onChange={this.handleLocationChanged.bind(this)}
+                                className="select-town"
+                                options={this.state.currentCounty === undefined ? undefined : transformLocationsOptions(Object.keys(this.state.allLocations[this.state.currentCounty]))}
+                                value={transformForOption(this.state.currentTown)}
+                                onChange={this.handleTownChanged.bind(this)}
+                                ref={(selectLocationCategory) => { this.selectLocationCategory = selectLocationCategory; }}
+                                placeholder={"Select Town"}
+                            >
+                            </Select>
+                        </Col>
+                        <Col md={6}>
+                            <Select
+                                className="select-site"
+                                options={this.state.currentTown === undefined ? undefined : transformLocationsOptions(this.state.allLocations[this.state.currentCounty][this.state.currentTown])}
+                                value={transformForOption(this.state.currentSite)}
+                                onChange={this.handleSiteChanged.bind(this)}
                                 ref={(selectLocation) => { this.selectLocation = selectLocation; }}
-                                placeholder={"Select location..."}
+                                placeholder={"Select Site"}
                                 >
                             </Select>
                         </Col>

@@ -24,7 +24,12 @@ function transformLocationsOptions(data) {
 }
 
 function transformForOption(data) {
-    if (data === undefined) return undefined;
+    if (data === undefined) {
+        return {
+            label: "",
+            value: ""
+        };
+    }
     return {label: data, value: data};
 }
 class LocationDetails extends Component {

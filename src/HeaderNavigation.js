@@ -30,6 +30,9 @@ class HeaderNavigation extends Component {
             <LinkContainer to="/trends">
               <NavItem>Trends</NavItem>
             </LinkContainer>
+            <LinkContainer to="/contributions">
+              <NavItem>Contribution</NavItem>
+            </LinkContainer>
             <LinkContainer to="/about">
               <NavItem>About</NavItem>
             </LinkContainer>

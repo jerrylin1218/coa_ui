@@ -31,8 +31,8 @@ export default class Contributions extends Component {
             <div>
                 {this.state.userInfo.name && this.state.userInfo.eventCode 
                     ? <ContributionForm
-                            name={this.state.name}
-                            eventCode={this.state.eventCode}
+                            name={this.state.userInfo.name}
+                            eventCode={this.state.userInfo.eventCode}
                             onLogout={() => this.updateUserInfo({})}
                         ></ContributionForm>
                     : <UserSignInForm

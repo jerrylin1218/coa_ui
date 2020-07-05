@@ -6,7 +6,10 @@ export default class TrashForm extends Component {
 
     change = e => {
         this.setState({
-            [e.target.name]: e.target.value
+            [e.target.id]: {
+                "value": e.target.value,
+                "text": e.target.value ? e.target.selectedOptions[0].text : ""
+            }
         });
     };
 
@@ -19,37 +22,41 @@ export default class TrashForm extends Component {
     constructor(props)
     {
         super(props);
+        this.state = {
+            "material": {
+                "value": null
+            },
+            "categories": [<option value="Plastic Pieces"/>, <option value="Metal Pieces"/>],
+            "items": [<option value="Plastic Straws"/>, <option value="Plastic Caps"/>]
+        };
     };
 
     render() {
         return(
             <div>
+                Please indicate the trash material<br/>
+                <select id="material" onChange={e => this.change(e)} value={this.state.material.value}>
+                    <option hidden disabled selected value> -- Select a material -- </option>
+                    <option value="plastic">Plastic</option>
+                    <option value="metal">Metal</option>
+                    <option value="paper">Paper</option>
+                </select><br/>
                 Please indicate the trash category<br/>
-                <select>
-                    <option value="volvo">Volvo</option>
-                    <option value="saab">Saab</option>
-                    <option value="mercedes">Mercedes</option>
-                    <option value="audi">Audi</option>
-                </select><br/>
+                <input list="categories" id="category"/>
+                <datalist id="categories">
+                    {this.state.categories}
+                </datalist><br/>
                 Please indicate the trash item<br/>
-                <select>
-                    <option value="volvo">Volvo</option>
-                    <option value="saab">Saab</option>
-                    <option value="mercedes">Mercedes</option>
-                    <option value="audi">Audi</option>
-                </select><br/>
+                <input list="items" id="item"/>
+                <datalist id="items">
+                    {this.state.items}
+                </datalist><br/>
                 Quantity<br/>
                 <input
                     name="numTrashItems"
                     type="number"
                     placeholder="Quantity"
                     required
-                /><br/>
-                Please identify the brand name if possible<br/>
-                <input
-                    name="itemBrandName"
-                    type="text"
-                    placeholder="Brand (Optional)"
                 /><br/>
                 <button onClick={e => this.onSubmit(e)}>Add</button>
             </div>

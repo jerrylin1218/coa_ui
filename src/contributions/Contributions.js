@@ -11,8 +11,7 @@ export default class Contributions extends Component {
         super(props);
         this.state = {
             "userInfo": {
-                "name": "",
-                "eventCode": ""
+                "name": ""
             }
         };
     }
@@ -29,7 +28,7 @@ export default class Contributions extends Component {
     render() {
         return(
             <div>
-                {this.state.userInfo.name && this.state.userInfo.eventCode 
+                {this.state.userInfo.name 
                     ? <ContributionForm
                             name={this.state.userInfo.name}
                             eventCode={this.state.userInfo.eventCode}

@@ -36,14 +36,6 @@ export default class UserSignInForm extends Component {
                     onChange={e => this.change(e)}
                 />
                 <br/><br/>
-                <input
-                    name="eventCode"
-                    type="text"
-                    value={this.state.eventCode}
-                    placeholder="Please enter event code"
-                    onChange={e => this.change(e)}
-                />
-                <br/><br/>
                 <input type="submit" value="Enter" onClick={e => this.onSubmit(e)}/>
             </form>
         );

@@ -24,9 +24,6 @@ class HeaderNavigation extends Component {
             <LinkContainer to="/map">
               <NavItem>Map</NavItem>
             </LinkContainer>
-            <LinkContainer to="/site">
-              <NavItem>Site</NavItem>
-            </LinkContainer>
             <LinkContainer to="/trends">
               <NavItem>Trends</NavItem>
             </LinkContainer>

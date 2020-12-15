@@ -1,44 +1,16 @@
 import './Contributions.css';
 
-import React, { Component } from 'react';
-import ContributionForm from "./ContributionForm";
-import UserSignInForm from "./UserSignInForm";
+import React from 'react';
+import ContributionsAccess from "./ContributionsAccess";
+import { UserProvider } from "./UserContext";
 
-export default class Contributions extends Component {
-
-    constructor(props)
-    {
-        super(props);
-        this.state = {
-            "userInfo": {
-                "name": ""
-            }
-        };
-    }
-
-    updateUserInfo(fields)
-    {
-        this.setState({
-            "userInfo": {
-                ...fields
-            }
-        });
-    }
-
-    render() {
-        return(
-            <div>
-                {this.state.userInfo.name 
-                    ? <ContributionForm
-                            name={this.state.userInfo.name}
-                            eventCode={this.state.userInfo.eventCode}
-                            onLogout={() => this.updateUserInfo({})}
-                        ></ContributionForm>
-                    : <UserSignInForm
-                            onSubmit={fields => this.updateUserInfo(fields)}
-                        ></UserSignInForm>}
-            </div>
-        );
-    }
+export default function Contributions() {
+    return(
+        <div>
+            <UserProvider>
+                <ContributionsAccess/>
+            </UserProvider>
+        </div>
+    );
 }
   

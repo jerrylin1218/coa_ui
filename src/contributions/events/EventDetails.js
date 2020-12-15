@@ -1,5 +1,5 @@
 import './EventDetails.css';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 export default function EventDetails(props) {
     const [numVolunteers, setNumVolunteers] = useState("");
@@ -53,6 +53,22 @@ export default function EventDetails(props) {
             props.setWalkingDistance(getValidFloat(e.target.value));
         }
     };
+
+    const valueToInputString = (value) => {
+        return value === undefined || value === null ? "" : value;
+    };
+
+    useEffect(() => {
+        setNumVolunteers(valueToInputString(props.event?.volunteer_cnt));
+        setNumTrashBags(valueToInputString(props.event?.trashbag_cnt));
+        setTrashWeight(valueToInputString(props.event?.trash_weight));
+        setWalkingDistance(valueToInputString(props.event?.walking_distance));
+
+        props.setNumVolunteers(props.event?.volunteer_cnt);
+        props.setNumTrashBags(props.event?.trashbag_cnt);
+        props.setTrashWeight(props.event?.trash_weight);
+        props.setWalkingDistance(props.event?.walking_distance);
+    }, [props.event]);
 
     return(
         <div>

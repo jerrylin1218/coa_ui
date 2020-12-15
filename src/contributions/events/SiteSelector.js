@@ -11,11 +11,17 @@ const sortByLabel = (lhs, rhs) => {
 };
 
 export default function SiteSelector(props) {
-    const [location, setLocation] = useState({"county": {}, "town": {}, "site": {}});
+    const isDisabled = props.disabled === true;
+    const [location, setLocation] = useState({
+        "county": {"value": props.county, "label": props.county},
+        "town": {"value": props.town, "label": props.town},
+        "site": {"value": props.site_name, "label": props.site_name}
+    });
     const [countyOptions, setCountyOptions] = useState([]);
     const [townOptions, setTownOptions] = useState([]);
     const [siteOptions, setSiteOptions] = useState([]);
     const [allSites, setAllSites] = useState([]);
+    const updateSiteId = props.updateSiteId;
     
     const setCounty = (countySelection) => {
         console.log("setCounty", countySelection);
@@ -103,6 +109,10 @@ export default function SiteSelector(props) {
 
     useEffect(() => {
         console.log("in use effect");
+        if (isDisabled) {
+            return;
+        }
+
         if (allSites.length === 0) {
             console.log("all sites empty");
             getData("sites")
@@ -120,8 +130,8 @@ export default function SiteSelector(props) {
             console.log("updating location options");
             updateLocationOptions();
         }
-        props.updateSiteId(location.siteId);
-    }, [location, allSites]);
+        updateSiteId(location.siteId);
+    }, [allSites, location]);
 
     return(
         <div className="locationSelection">
@@ -129,6 +139,7 @@ export default function SiteSelector(props) {
                 bsStyle="default"
                 className="select"
                 isClearable
+                isDisabled={isDisabled}
                 value={location.county}
                 options={countyOptions}
                 onChange={(selection) => setCounty(selection)}>
@@ -137,6 +148,7 @@ export default function SiteSelector(props) {
                 bsStyle="default"
                 className="select"
                 isClearable
+                isDisabled={isDisabled}
                 value={location.town}
                 options={townOptions}
                 onChange={(selection) => setTown(selection)}>
@@ -145,6 +157,7 @@ export default function SiteSelector(props) {
                 bsStyle="default"
                 className="select"
                 isClearable
+                isDisabled={isDisabled}
                 value={location.site}
                 options={siteOptions}
                 onChange={(selection) => setSite(selection)}>

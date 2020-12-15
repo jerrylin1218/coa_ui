@@ -1,46 +1,34 @@
 import './ContributionForm.css';
 
-import React, { Component } from 'react';
+import React, { useState, useContext } from 'react';
 import { Tab, Tabs } from 'react-bootstrap';
 
 import Events from "./events/Events";
+import { userContext } from "./UserContext";
 
-export default class ContributionForm extends Component {
+export default function ContributionForm() {
+    const [selectedTab, setSelectedTab] = useState("events");
+    const {userState, setUserState} = useContext(userContext);
 
-    onLogout(e)
-    {
-        this.props.onLogout();
+    const onLogout = () => {
+        setUserState({
+            "name": ""
+        });
     };
 
-    constructor(props)
-    {
-        super(props);
-        console.log(props);
-        this.state = {
-            "name": this.props.name,
-            "selectedTab": "events"
-        };
-    };
-
-    render() {
-        return(
-            <div>
-            <h2>Please enter your contribution!</h2>
-            <input
-                name="name"
-                type="text"
-                value={this.state.name}
-                disabled
-            />
+    return(
+        <div>
+            <h3>Please enter your contribution!</h3>
+            <div className="name">{userState.name}</div>
             <button
-                onClick={e => this.onLogout(e)}>
+                onClick={onLogout}>
                 Logout
             </button>
             <br/><br/>
             <Tabs
                 id="edit-details-tab"
-                activeKey={this.selectedTab}
-                onSelect={(k) => this.setState({"selectedTab": k})}>
+                activeKey={selectedTab}
+                onSelect={setSelectedTab}>
                 <Tab eventKey="events" title="Cleanup Events">
                     <Events
                     />
@@ -52,8 +40,7 @@ export default class ContributionForm extends Component {
                     <p>Sites</p>
                 </Tab>
             </Tabs>
-            </div>
-        );
-    }
+        </div>
+    );
 }
   

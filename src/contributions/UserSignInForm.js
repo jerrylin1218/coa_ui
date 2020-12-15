@@ -1,44 +1,58 @@
 import './UserSignInForm.css';
 
-import React, { Component } from 'react';
+import React, { useState, useContext } from 'react';
+import { postData } from "../BackendAccessor.js";
+import { userContext } from "./UserContext";
 
-export default class UserSignInForm extends Component {
+export default function UserSignInForm(props) {
+    const {setUserState} = useContext(userContext);
+    const [name, setName] = useState("");
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
 
-    change = e => {
-        this.setState({
-            [e.target.name]: e.target.value
-        });
-    };
-
-    onSubmit(e)
-    {
-        e.preventDefault();
-        this.props.onSubmit(this.state);
-    };
-
-    constructor(props)
-    {
-        super(props);
-        this.state = {
-            "name": "",
-            "eventCode": "",
+    const attemptLogIn = () => {
+        const contextObj = {
+            "name": name
         };
+        setUserState(contextObj);
+        /*postData('login', {"username": username, "password": password})
+            .then((response) => {
+                console.log(response);
+            });*/
     };
 
-    render() {
-        return(
-            <form>
-                <input
-                    name="name"
-                    type="text"
-                    value={this.state.name}
-                    placeholder="Please enter your name"
-                    onChange={e => this.change(e)}
-                />
-                <br/><br/>
-                <input type="submit" value="Enter" onClick={e => this.onSubmit(e)}/>
-            </form>
-        );
-    }
+    const onSubmit = (e) => {
+        e.preventDefault();
+        attemptLogIn();
+    };
+
+    return(
+        <form>
+            <input
+                name="name"
+                type="text"
+                value={name}
+                placeholder="Please enter your name"
+                onChange={(e) => setName(e.target.value)}
+            />
+            {/*<br/>
+            <input
+                name="username"
+                type="text"
+                value={username}
+                placeholder="Please enter your username"
+                onChange={(e) => setUsername(e.target.value)}
+            /><br/>
+            <input
+                name="password"
+                type="password"
+                value={password}
+                placeholder="Please enter your password"
+                onChange={(e) => setPassword(e.target.value)}
+            />*/}
+            <br/><br/>
+            <input type="submit" value="Enter" onClick={onSubmit}/>
+        </form>
+    );
 }
   

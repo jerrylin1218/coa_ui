@@ -10,25 +10,23 @@ const sortByLabel = (lhs, rhs) => {
     return (LHS < RHS) ? -1 : ((LHS > RHS) ? 1 : 0);
 };
 
-export default function SiteSelector(props) {
-    const isDisabled = props.disabled === true;
+export default function SiteSelector({isDisabled, selectedSite, setSiteId}) {
     const [location, setLocation] = useState({
-        "county": {"value": props.county, "label": props.county},
-        "town": {"value": props.town, "label": props.town},
-        "site": {"value": props.site_name, "label": props.site_name}
+        "county": {"value": selectedSite?.county, "label": selectedSite?.county},
+        "town": {"value": selectedSite?.town, "label": selectedSite?.town},
+        "site": {"value": selectedSite?.site_name, "label": selectedSite?.site_name}
     });
     const [countyOptions, setCountyOptions] = useState([]);
     const [townOptions, setTownOptions] = useState([]);
     const [siteOptions, setSiteOptions] = useState([]);
     const [allSites, setAllSites] = useState([]);
-    const updateSiteId = props.updateSiteId;
     
     const setCounty = (countySelection) => {
         console.log("setCounty", countySelection);
         setLocation({
             "county": countySelection,
-            "town": "",
-            "site": ""
+            "town": {},
+            "site": {}
         });
     };
     
@@ -74,40 +72,38 @@ export default function SiteSelector(props) {
         }
     }
 
-    const updateCountyOptions = () => {
-        if (countyOptions.length === 0) {
+    useEffect(() => {
+        const updateCountyOptions = (sites) => {
             const countySet = new Set();
-            allSites.forEach((site) => countySet.add(site.county));
+            sites.forEach((site) => countySet.add(site.county));
             setCountyOptions(Array.from(countySet).sort().map(
                 county => { return {"value": county, "label": county}; }));
-        }
-    };
+        };
 
-    const updateLocationOptions = () => {
-        updateCountyOptions();
-        const townSet = new Set();
-        const siteSet = new Set();
-        allSites.forEach((site) => {
-            if (!location.county?.label || site.county === location.county.label) {
-                const townValue = site.county + "|" + site.town;
-                townSet.add(townValue);
-                if (!location.town?.label || site.town === location.town.label) {
-                    siteSet.add(townValue + "|" + site.site_name + "|" + site.site_id);
+        const updateTownAndSiteOptions = (sites) => {
+            const townSet = new Set();
+            const siteSet = new Set();
+            sites.forEach((site) => {
+                if (!location.county?.label || site.county === location.county.label) {
+                    const townValue = site.county + "|" + site.town;
+                    townSet.add(townValue);
+                    if (!location.town?.label || site.town === location.town.label) {
+                        siteSet.add(townValue + "|" + site.site_name + "|" + site.site_id);
+                    }
                 }
-            }
-        });
-        let townSelections = Array.from(townSet).map(townValue => {
-            return {"value": townValue, "label": townValue.split("|")[1]};
-        }).sort(sortByLabel);
-        setTownOptions(townSelections);
+            });
+            let townSelections = Array.from(townSet).map(townValue => {
+                return {"value": townValue, "label": townValue.split("|")[1]};
+            }).sort(sortByLabel);
+            setTownOptions(townSelections);
 
-        let siteSelections = Array.from(siteSet).map(siteValue => {
-            return {"value": siteValue, "label": siteValue.split("|")[2]};
-        }).sort(sortByLabel);
-        setSiteOptions(siteSelections);
-    };
+            let siteSelections = Array.from(siteSet).map(siteValue => {
+                return {"value": siteValue, "label": siteValue.split("|")[2]};
+            }).sort(sortByLabel);
+            setSiteOptions(siteSelections);
+        };
 
-    useEffect(() => {
+        
         console.log("in use effect");
         if (isDisabled) {
             return;
@@ -120,6 +116,7 @@ export default function SiteSelector(props) {
                 results.json().then((response) => {
                     console.log("sites", response);
                     setAllSites(response.sites);
+                    updateCountyOptions(response.sites);
                 });
             })
             .catch(() => {
@@ -128,10 +125,10 @@ export default function SiteSelector(props) {
         }
         else {
             console.log("updating location options");
-            updateLocationOptions();
+            updateTownAndSiteOptions(allSites);
+            setSiteId(location.siteId);
         }
-        updateSiteId(location.siteId);
-    }, [allSites, location]);
+    }, [allSites, location, isDisabled, setSiteId]);
 
     return(
         <div className="locationSelection">

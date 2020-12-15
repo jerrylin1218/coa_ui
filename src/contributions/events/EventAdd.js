@@ -44,6 +44,10 @@ export default function EventAddButton(props) {
     useEffect(() => {
         console.log("eventAdd useEffect", props.event);
         setSiteId(props.event?.site_id);
+    }, [props.event]);
+
+    useEffect(() => {
+        console.log("eventAdd useEffect", props.event);
         if (props.event) {
             const isUpdated = (props.event.volunteer_cnt !== numVolunteers
                 || props.event.trashbag_cnt !== numTrashBags
@@ -66,12 +70,10 @@ export default function EventAddButton(props) {
                 <Modal.Body>
                     <h4>Location</h4>
                     <SiteSelector
-                        disabled={!!props.event}
-                        county={props.event?.county}
-                        town={props.event?.town}
-                        site_name={props.event?.site_name}
-                        site_id={props.event?.site_id}
-                        updateSiteId={setSiteId}
+                        isDisabled={!!props.event}
+                        selectedSite={props.event}
+                        siteId={siteId}
+                        setSiteId={setSiteId}
                     />
                     <h4>Details</h4>
                     <EventDetails

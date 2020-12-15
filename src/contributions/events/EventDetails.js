@@ -1,11 +1,11 @@
 import './EventDetails.css';
 import React, { useEffect, useState } from 'react';
 
-export default function EventDetails(props) {
-    const [numVolunteers, setNumVolunteers] = useState("");
-    const [numTrashBags, setNumTrashBags] = useState("");
-    const [trashWeight, setTrashWeight] = useState("");
-    const [walkingDistance, setWalkingDistance] = useState("");
+export default function EventDetails({event, setNumVolunteers, setNumTrashBags, setTrashWeight, setWalkingDistance}) {
+    const [numVolunteersInput, setNumVolunteersInput] = useState("");
+    const [numTrashBagsInput, setNumTrashBagsInput] = useState("");
+    const [trashWeightInput, setTrashWeightInput] = useState("");
+    const [walkingDistanceInput, setWalkingDistanceInput] = useState("");
 
     const getValidInt = (value) => {
         const parsedValue = parseInt(value, 10);
@@ -24,33 +24,34 @@ export default function EventDetails(props) {
     }
 
     const updateNumVolunteers = (e) => {
-        console.log(numVolunteers, e.target.validity.valid, e.target.value);
+        console.log(numVolunteersInput, e.target.validity.valid, e.target.value);
         if (e.target.validity.valid || e.target.value === '') {
-            setNumVolunteers(e.target.value);
-            props.setNumVolunteers(getValidInt(e.target.value));
+            setNumVolunteersInput(e.target.value);
+            setNumVolunteers(getValidInt(e.target.value));
         }
     };
 
     const updateNumTrashBags = (e) => {
+        console.log(numTrashBagsInput, e.target.validity.valid, e.target.value);
         if (e.target.validity.valid || e.target.value === '') {
-            setNumTrashBags(e.target.value);
-            props.setNumTrashBags(getValidInt(e.target.value));
+            setNumTrashBagsInput(e.target.value);
+            setNumTrashBags(getValidInt(e.target.value));
         }
     };
 
     const updateTrashWeight = (e) => {
-        console.log(trashWeight, e.target.validity.valid, e.target.value);
+        console.log(trashWeightInput, e.target.validity.valid, e.target.value);
         if (e.target.validity.valid || e.target.value === '') {
-            setTrashWeight(e.target.value);
-            props.setTrashWeight(getValidFloat(e.target.value));
+            setTrashWeightInput(e.target.value);
+            setTrashWeight(getValidFloat(e.target.value));
         }
     };
     
     const updateWalkingDistance = (e) => {
-        console.log(trashWeight, e.target.validity.valid, e.target.value);
+        console.log(walkingDistanceInput, e.target.validity.valid, e.target.value);
         if (e.target.validity.valid || e.target.value === '') {
-            setWalkingDistance(e.target.value);
-            props.setWalkingDistance(getValidFloat(e.target.value));
+            setWalkingDistanceInput(e.target.value);
+            setWalkingDistance(getValidFloat(e.target.value));
         }
     };
 
@@ -59,16 +60,16 @@ export default function EventDetails(props) {
     };
 
     useEffect(() => {
-        setNumVolunteers(valueToInputString(props.event?.volunteer_cnt));
-        setNumTrashBags(valueToInputString(props.event?.trashbag_cnt));
-        setTrashWeight(valueToInputString(props.event?.trash_weight));
-        setWalkingDistance(valueToInputString(props.event?.walking_distance));
+        setNumVolunteersInput(valueToInputString(event?.volunteer_cnt));
+        setNumTrashBagsInput(valueToInputString(event?.trashbag_cnt));
+        setTrashWeightInput(valueToInputString(event?.trash_weight));
+        setWalkingDistanceInput(valueToInputString(event?.walking_distance));
 
-        props.setNumVolunteers(props.event?.volunteer_cnt);
-        props.setNumTrashBags(props.event?.trashbag_cnt);
-        props.setTrashWeight(props.event?.trash_weight);
-        props.setWalkingDistance(props.event?.walking_distance);
-    }, [props.event]);
+        setNumVolunteers(event?.volunteer_cnt);
+        setNumTrashBags(event?.trashbag_cnt);
+        setTrashWeight(event?.trash_weight);
+        setWalkingDistance(event?.walking_distance);
+    }, [event, setNumVolunteers, setNumTrashBags, setTrashWeight, setWalkingDistance]);
 
     return(
         <div>
@@ -78,7 +79,7 @@ export default function EventDetails(props) {
                 type="tel"
                 pattern="[1-9]\d*" // only positive integers
                 placeholder="Number of Volunteers"
-                value={numVolunteers}
+                value={numVolunteersInput}
                 onChange={updateNumVolunteers}
             /><br/>
             Trash Bags<br/>
@@ -87,7 +88,7 @@ export default function EventDetails(props) {
                 type="tel"
                 pattern="[1-9]\d*" // only positive integers
                 placeholder="Number of Trash Bags"
-                value={numTrashBags}
+                value={numTrashBagsInput}
                 onChange={updateNumTrashBags}
             /><br/>
             Trash Weight (lbs)<br/>
@@ -96,7 +97,7 @@ export default function EventDetails(props) {
                 type="tel"
                 pattern="[0-9]\d*\.?\d*$" // only postiive numbers
                 placeholder="Trash Weight (lbs)"
-                value={trashWeight}
+                value={trashWeightInput}
                 onChange={updateTrashWeight}
             /><br/>
             Walking Distance (mi)<br/>
@@ -105,7 +106,7 @@ export default function EventDetails(props) {
                 type="tel"
                 pattern="[0-9]\d*\.?\d*$" // only postiive numbers
                 placeholder="Walking Distance (mi)"
-                value={walkingDistance}
+                value={walkingDistanceInput}
                 onChange={updateWalkingDistance}
             />
         </div>

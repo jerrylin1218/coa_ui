@@ -12,7 +12,6 @@ import {
     IntegratedSorting,
     SortingState,
     TableColumnVisibility,
-    TableColumnResizing,
 } from '@devexpress/dx-react-grid';
 import {
     Grid,
@@ -50,7 +49,7 @@ export default function Events() {
     const [events, setEvents] = useState([]);
     const [eventsMap, setEventsMap] = useState({});
 
-    const [editingRowIds, __unusedSetEditingRowIds] = useState([]);
+    const [editingRowIds] = useState([]);
     const [defaultHiddenColumnNames] = useState("event_id");
     const [selectedEvent, setSelectedEvent] = useState(undefined);
 

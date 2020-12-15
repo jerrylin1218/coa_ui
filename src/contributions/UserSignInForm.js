@@ -1,14 +1,14 @@
 import './UserSignInForm.css';
 
 import React, { useState, useContext } from 'react';
-import { postData } from "../BackendAccessor.js";
+// import { postData } from "../BackendAccessor.js";
 import { userContext } from "./UserContext";
 
 export default function UserSignInForm(props) {
     const {setUserState} = useContext(userContext);
     const [name, setName] = useState("");
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
+    // const [username, setUsername] = useState("");
+    // const [password, setPassword] = useState("");
 
     const attemptLogIn = () => {
         const contextObj = {

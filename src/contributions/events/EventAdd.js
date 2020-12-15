@@ -82,7 +82,7 @@ export default function EventAddButton(props) {
                         setWalkingDistance={setWalkingDistance}/>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button disabled={!siteId || !hasUpdates} variant="primary" onClick={addEventClicked}>
+                    <Button disabled={!siteId || (props.event && !hasUpdates)} variant="primary" onClick={addEventClicked}>
                         {props.event ? "Update" : "Add"}
                     </Button>
                     <Button variant="secondary" onClick={handleClose}>

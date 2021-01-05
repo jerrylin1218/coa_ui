@@ -1,7 +1,7 @@
 
 export function getData(endpoint) {
-    const url = /* process.env.NODE_ENV === "development" ?
-        "http://localhost:5000" :*/ "http://coa-flask-app-prod.us-east-1.elasticbeanstalk.com";
+    const url = process.env.NODE_ENV === "development" ?
+        "http://localhost:5000" : "http://coa-flask-app-prod.us-east-1.elasticbeanstalk.com";
 
     console.log(`getData url=${url}/${endpoint}`);
 
@@ -15,7 +15,7 @@ export function postData(endpoint, data) {
     const requestOptions = {
         "method": "POST",
         "mode": "cors",
-        "headers": { "Content-Type": "application/json" },
+        "headers": { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" },
         "body": JSON.stringify(data),
     }
     console.log(`postData url=${url}/${endpoint}`, requestOptions);
